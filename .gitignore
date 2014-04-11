@@ -1,0 +1,30 @@
+#data files and log files
+*.dta
+*.log
+*.smcl
+
+#word files
+*.doc
+*.docx
+*.txt
+
+#excel files
+*.xls
+*.xlsx
+*.csv
+*.xml
+
+#pdf files
+*.pdf
+
+#tex files
+*.aux
+*.log
+*.gz
+*.tex
+*.lot
+*.out
+
+
+#temporary files
+*~
