@@ -1,10 +1,12 @@
 program tex3pt
 *! version 1.0 Derek Wolfson 11apr2014
 syntax anything(name=table id="tex table") using/, ///
-	[replace] [TITLE(string) TLABel(string) NOTE(string)] ///
+	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
 	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string)] ///
-	
+
+version 12.1	
+
 	**CREATE LOCALS FOR USING AND TABLE SINCE THEY WILL BE CLEARED BY SUBSEQ. SYNTAX CALLS*
 	local table1 : copy loc table
 	local using1 : copy loc using 
@@ -106,8 +108,7 @@ syntax anything(name=table id="tex table") using/, ///
 		}
 	**END MFONT OPTION**
 	
-version 12.1		
-
+version 12.1
 
 **OPTIONS STORED IN LOCALS**
 	**MARGIN SIZE**
@@ -245,6 +246,20 @@ foreach string in title note{
 	}
 }
 
+		**BREAK NOTE INTO LINES**
+			local notelines = 0
+			if `"`note'"'!=""{
+			local ++notelines
+			gettoken part rest: note, parse(",")
+			local note`notelines' `"`part'"'
+			 
+			 while `"`rest'"'!="" {
+			  local ++notelines 
+			  gettoken part rest: rest, parse(",")
+			  gettoken part rest: rest, parse(",")
+			  local note`notelines' `"`part'"'
+			 }
+			}
 	
 **DEFINE TEMPNAME FOR FILE HANDLE**
 tempname tex_file
@@ -447,10 +462,21 @@ file write `tex_file' ///
 		"    \caption{`tablelabel'`title'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{S[table-format=`DIGITSBEFOREDECIMAL'.`DIGITSAFTERDECIMAL'`columnwidth']}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
 		`"	`starnote' "' _n														/// USES STARNOTE MACRO HERE
-		`"\Figtext{{`notefontsize' `note'}} %%TABLE NOTE"' _n 										/// USES NOTE & NOTEFONTSIZE MACRO HERE
-		"  \end{threeparttable}" _n ///
+
+
+	
+	**WRITE NOTES**
+		forvalues i = 1/`notelines'{
+			file write `tex_file' ///
+		`"\Figtext{{`notefontsize' `note`i''}} %%TABLE NOTE"' _n 										// USES NOTE & NOTEFONTSIZE MACRO HERE
+			}
+			
+	**FINISH TABLE**
+		file write `tex_file' ///
+			"  \end{threeparttable}" _n ///
 		"\end{table}" _n  
 	file close `tex_file'
+			
 
 	**INCLUDE LANDSCAPE CLOSURE
 		if "`landscape'"!=""{
@@ -484,10 +510,10 @@ file write `tex_file' ///
 		file close `tex_file'
 	}
 
-**COMPILE COMPLETED TEX DOCUMENT** (THANKS RAYMOND)
+	**COMPILE COMPLETED TEX DOCUMENT** (THANKS RAYMOND)
 	if "`compile'"!=""{
-		qui cd "`NWD'"
 		if "`c(os)'" == "Windows" { 
+			qui cd "`NWD'"
 			cap rm "`using1'.pdf"
 			*run pdflatex twice for hyperref
 			!pdflatex "`using1'.tex" & pdflatex "`using1'.tex"
@@ -497,19 +523,29 @@ file write `tex_file' ///
 			cap rm "`using1'.lot"
 			cap rm "`using1'.out"
 			cap rm "`using1'.ttt"
-		}
-		
-            di as txt `"(TEX output written to {browse "`using1'.tex"})"'
-			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'
-			
-			*CHANGE DIRECTORY BACK*
 			qui cd "`CWD'"
-	}
+			
+			di as txt `"(TEX output written to {browse "`using1'.tex"})"'
+			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'	
+		}
 
 	else{
-		di as txt `"(TEX output written to {browse "`using1'.tex"})"'
+		di as txt   	`"(TEX output written to {browse "`using1'.tex"})"'
+		di as error `"(The tex3pt compile option does not currently support `c(os)' at this time)"'
 	}
+}
+	**IF COMPILE IS NOT SELECTED**
+	else {
+		di as txt   	`"(TEX output written to {browse "`using1'.tex"})"'
+	}
+
+	
 end
+
+
+
+
+
 
 **PROGRAM FOR GETTING COLUMN NUMBRS AND DIGITS BEFORE/AFTER 
 pr get_params, rclass

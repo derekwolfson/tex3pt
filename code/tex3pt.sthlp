@@ -78,6 +78,10 @@ insert \label{table1} within the \caption{} command.
 below the table in LaTeX.  The notes will be typeset in \footnotesize unless
 size \scriptsize or \tiny is specified in the option fontsize.  If one of these 
 sizes is selected then the table notes will be typeset in \scriptsize or \tiny, respectively. 
+To force a line break in the notes insert a comma between notes.  For example, 
+note("note1", "note2") will insert note1 on one line and note2 on a separate line.
+Your notes must be enclosed in quote if they contain a comma.  For example note("Hello,","Mister") will 
+insert Hello, on one line and Mister on a separate line.   
 
 {phang}
 {opt star:s}{bf:({it:startype})}  displays the standard p-value significance 
