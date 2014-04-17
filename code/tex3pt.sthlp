@@ -181,10 +181,6 @@ This package is intended to work with {cmd:esttab}.  If you do not have this pac
 
 
 {pstd}
-This package is intended to work with {cmd:esttab}.  If you do not have this packages use 
-{stata ssc install estout:ssc install estout} to install the {cmd:estout} package (which includes {cmd:esttab}).
-
-{pstd}
 To use this package with {cmd:esttab} output you must supply the options {it:booktabs fragment} or {it:tex fragment} to {cmd: esttab}.  
 This is the format that {cmd: tex3pt} expects, and it will not work otherwise. This package is not currently compatible with the 
 LaTeX package longtable, however a solution is in the works.
