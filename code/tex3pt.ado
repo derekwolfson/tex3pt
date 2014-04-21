@@ -228,8 +228,16 @@ version 12.1
 **CREATE LOCAL FOR NUMBER OF COLUMNS & NUMBER OF DIGITS BEFORE AND AFTER DECIMAL POINT** 
 	get_params, table("`table1'")
 	loc NUMBEROFCOLUMNS = r(NUMBEROFCOLUMNS)
-	loc DIGITSBEFOREDECIMAL = r(COUNT1)
-	loc DIGITSAFTERDECIMAL = r(COUNT2)
+	loc N_ALIGN = `NUMBEROFCOLUMNS'+1
+	*loc DIGITSBEFOREDECIMAL = r(COUNT1)
+	*loc DIGITSAFTERDECIMAL = r(COUNT2)
+	
+	forvalues i = 2 / `N_ALIGN'{
+	loc DBEFOREDEC	= r(COL`i'_C1)
+	local DAFTERDEC = r(COL`i'_C2)
+	local COLALIGN `COLALIGN' S[table-format=`DBEFOREDEC'.`DAFTERDEC' `columnwidth']
+	}
+	
 	
 **CREATE WORKING DIRECTORY LOCALS**
 	*CURRENT DIRECTORY*
@@ -460,7 +468,7 @@ file write `tex_file' ///
 		"\begin{table}\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
 		"  \begin{threeparttable}" _n ///	
 		"    \caption{`tablelabel'`title'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
-		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{S[table-format=`DIGITSBEFOREDECIMAL'.`DIGITSAFTERDECIMAL'`columnwidth']}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
+		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
 		`"	`starnote' "' _n														/// USES STARNOTE MACRO HERE
 
 
@@ -552,33 +560,29 @@ pr get_params, rclass
 syntax, table(str)
 quietly{
 preserve 
-clear
-insheet using "`table'", delimiter("&") nonames
-
+insheet using "`table'", delimiter("&") nonames clear
+local NUM = c(k)
 ret sca NUMBEROFCOLUMNS = c(k)-1
-drop v1
 
-gen i = _n
-reshape long v, i(i)
-drop i _j
-drop if mi(v)
 
-drop if regexm(v, "^\\multicolumn")
-//drop if ...
-
-gen n = regexs(2) if regexm(v, "(^|[^0-9.])([0-9]+(\.[0-9]+)?)([^0-9]|$)")
-drop v
-drop if mi(n)
-
-ret sca COUNT2 = 0
-qui split n, parse(.)
-forv i = 1/`r(nvars)' {
-	gen len = length(n`i')
-	su len
-	ret sca COUNT`i' = r(max)
-	drop n`i' len
+forvalues i = 2/`c(k)'{
+drop if regexm(v`i', "^\\multicolumn")
+gen n`i' = regexs(2) if regexm(v`i', "(^|[^0-9.])([0-9]+(\.[0-9]+)?)([^0-9]|$)")
 }
-restore
+drop v*
+
+
+forvalues i = 2/`NUM'{
+qui split n`i', parse(.)
+		ret sca COL`i'_C2 = 0
+	forv k = 1/`r(nvars)'{
+		gen len = length(n`i'`k')
+		su len
+		ret sca COL`i'_C`k' = r(max)
+	 drop len
+	}
+}
+
 } //end quietly
 end
 
