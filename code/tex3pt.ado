@@ -573,13 +573,20 @@ drop v*
 
 
 forvalues i = 2/`NUM'{
-qui split n`i', parse(.)
+	tab n`i'
+	if r(N)==0{
+		ret sca COL`i'_C1 = 1
+		ret sca COL`i'_C2 = 0 
+	}
+	else{
+		qui split n`i', parse(.)
 		ret sca COL`i'_C2 = 0
-	forv k = 1/`r(nvars)'{
-		gen len = length(n`i'`k')
-		su len
-		ret sca COL`i'_C`k' = r(max)
-	 drop len
+		forv k = 1/`r(nvars)'{
+			gen len = length(n`i'`k')
+			su len
+			ret sca COL`i'_C`k' = r(max)
+		 drop len
+		}
 	}
 }
 
