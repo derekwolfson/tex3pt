@@ -1,5 +1,5 @@
 program tex3pt
-*! version 1.0 Derek Wolfson 11apr2014
+*! version 1.0 Derek Wolfson 1may2014
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
@@ -322,6 +322,7 @@ cap file close `tex_file'
 	`"% Packages for tables"' _n ///
 	`"\usepackage{booktabs}% Pretty tables"' _n ///
 	`"\usepackage{threeparttable}% For Notes below table"' _n ///
+	`"\usepackage[skip=5pt, justification=centering]{caption}"' _n ///
 	`"\usepackage{longtable}"' _n ///
 	`"\usepackage{pdflscape}"' _n ///
 	`"\usepackage{amsmath}"' _n  ///
@@ -560,16 +561,16 @@ pr get_params, rclass
 syntax, table(str)
 quietly{
 preserve 
-insheet using "`table'", delimiter("&") nonames clear
+chewfile using "`table'", parse("&") semiclear
 local NUM = c(k)
 ret sca NUMBEROFCOLUMNS = c(k)-1
 
 
 forvalues i = 2/`c(k)'{
-drop if regexm(v`i', "^\\multicolumn")
-gen n`i' = regexs(2) if regexm(v`i', "(^|[^0-9.])([0-9]+(\.[0-9]+)?)([^0-9]|$)")
+drop if regexm(var`i', "^\\multicolumn")
+gen n`i' = regexs(2) if regexm(var`i', "(^|[^0-9.])([0-9]+(\.[0-9]+)?)([^0-9]|$)")
 }
-drop v*
+drop var*
 
 
 forvalues i = 2/`NUM'{
@@ -579,10 +580,10 @@ forvalues i = 2/`NUM'{
 		ret sca COL`i'_C2 = 0 
 	}
 	else{
-		qui split n`i', parse(.)
+		qui split n`i', parse(.) gen(s`i')
 		ret sca COL`i'_C2 = 0
 		forv k = 1/`r(nvars)'{
-			gen len = length(n`i'`k')
+			gen len = length(s`i'`k')
 			su len
 			ret sca COL`i'_C`k' = r(max)
 		 drop len

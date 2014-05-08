@@ -351,7 +351,7 @@ you may find and remove these files.
 			  suffix(}) ///
 			) /// end eqlabels
 			collabels("" "", /// 
-			  lhs("\multicolumn{1}{c}{Repair Record}")
+			  lhs("\multicolumn{1}{c}{Repair Record}") ///
 			) // end collabels
 
 		tex3pt "test311.tex" using "master31.tex", ///
