@@ -1,11 +1,11 @@
 {smcl}
-{* *! version 2.0  09apr2014}{...}
+{* *! version 2.0.1  09apr2014 Derek Wolfson}{...}
 {findalias asfradohelp}{...}
-{viewerjumpto "Syntax" "examplehelpfile##syntax"}{...}
-{viewerjumpto "Description" "examplehelpfile##description"}{...}
-{viewerjumpto "Options" "examplehelpfile##options"}{...}
-{viewerjumpto "Remarks" "examplehelpfile##remarks"}{...}
-{viewerjumpto "Examples" "examplehelpfile##examples"}{...}
+{viewerjumpto "Syntax" "tex3pt##syntax"}{...}
+{viewerjumpto "Description" "tex3pt##description"}{...}
+{viewerjumpto "Options" "tex3pt##options"}{...}
+{viewerjumpto "Remarks" "tex3pt##remarks"}{...}
+{viewerjumpto "Examples" "tex3pt##examples"}{...}
 {title:Title}
 
 {phang}
@@ -172,13 +172,19 @@ will set the math font to Euler Virtual Math using the small and euler-digits op
 \usepackage[small, euler-digits]{eulervm} to the preamble.  If the option font is not specified the default 
 LaTeX math font Computer Modern is used.
 
+{dlgtab:Added {cmd:estout} syntax...}
+{phang}
+The LaTeX preamble that this command writes includes the user-written command {it:\specialcell{}}.  With special cell you can specify line breaks.
+This is especially helpful when you want to have complex column titles.  For example if you define a column title in esttab as "Foreign Cars (Non-Rotary)" 
+it will be problematic for LaTeX since it will not add any line in the column title.  You can get around this by using the {it:specialcell} syntax. The correct syntax for 
+the column title above would be specialcell{Foreign Cars \\ (Non-Rotary)} will create a column title across two lines with the break defined where you enter "\\".
+See example 2.1 for an example of this syntax in practice.   
 {marker remarks}{...}
 {title:Remarks}
 
 {pstd}
 This package is intended to work with {cmd:esttab}.  If you do not have this packages use 
 {stata ssc install estout:ssc install estout} to install the {cmd:estout} package (which includes {cmd:esttab}).
-
 
 {pstd}
 To use this package with {cmd:esttab} output you must supply the options {it:booktabs fragment} or {it:tex fragment} to {cmd: esttab}.  
@@ -237,7 +243,8 @@ you may find and remove these files.
 	{it:Copy the text below into a do-file editor and run this code to output a regression table table using {cmd:tex3pt}:}
 	{p_end}
 
-		sysuse auto 
+		sysuse auto
+		replace price=price/1000
 
 		qui eststo example111: reg price mpg weight 
 		qui eststo example112: reg price mpg weight headroom trunk length
@@ -253,7 +260,12 @@ you may find and remove these files.
 			 prefix(\multicolumn{@span}{c}{) ////
 			 suffix(}) ///
 			 span erepeat(\cmidrule(lr){@span}) ///
-			) //end mgroups
+			) ///end mgroups
+			stats(r2 N, ///
+			 fmt(3 0) ///
+			 layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
+			 labels("R-Sq" "Observations") ///
+			) // end stats
 			
 		tex3pt "test11.tex" using "master11.tex", ///
 			page ///
@@ -270,6 +282,7 @@ you may find and remove these files.
 	{p_end}
 	
 		sysuse auto 
+		replace price=price/1000
 
 		qui eststo example121: reg price mpg weight 
 		qui eststo example122: reg price mpg weight headroom trunk length
@@ -280,13 +293,23 @@ you may find and remove these files.
 		esttab example121 example122 using "test121", ///
 			replace fragment booktabs ///
 			label b(3) se(3) se ///
-			star(* .1 ** .05 *** .01) 
+			star(* .1 ** .05 *** .01) ///
+			stats(r2 N, ///
+			 fmt(3 0) ///
+			 layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
+			 labels("R-Sq" "Observations") ///
+			) // end stats
 
 
 		esttab example123 example124 using "test122", ///
 			replace fragment booktabs ///
 			label b(3) se(3) se ///
-			star(* .1 ** .05 *** .01) 
+			star(* .1 ** .05 *** .01) ///
+			stats(r2 N, ///
+			 fmt(3 0) ///
+			 layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
+			 labels("R-Sq" "Observations") ///
+			) // end stats
 
 			
 
@@ -314,23 +337,24 @@ you may find and remove these files.
 	{p_end}
 	
 		sysuse auto 
+		replace price=price/1000
 
 		eststo example211: estpost summarize mpg rep78 foreign, listwise
 
-		esttab example 211 using example211, ///
-			replace fragment booktabs ///
+		esttab example211 using example211, ///
+			replace fragment booktabs noobs ///
 			nomtitle nonumber ///
-			cells("mean(fmt(2)) sd(fmt(2)) min(fmt(0)) max(fmt(0))") ///
-			collabels("Mean" "SD" "Min" "Max", ///
-			  prefix(\multicolumn{@span}{c}{) ///
-			  suffix(}) ///
+			cells("count(fmt(0)) mean(fmt(2)) sd(fmt(2)) min(fmt(0)) max(fmt(0))") ///
+			collabels("N" "Mean" "\specialcell{Std. \\ Dev.}" "Min" "Max", ///
+			 prefix({) ///
+			 suffix(}) ///
 			) // end collabels
-
 
 		tex3pt example211.tex using master21.tex, ///
 			page ///
 			compile ///
 			title("Summary Statistics")
+
 			
 	{pmore}
 	{bf:{ul:Example 3.1 - Tabulation Table}}{p_end}
@@ -338,6 +362,8 @@ you may find and remove these files.
 	{it:Copy the text below into a do-file editor and run this code to output a tabulation table using {cmd:tex3pt}:}{p_end}
 
 		sysuse auto
+		replace price=price/1000
+		
 		eststo example311: estpost tabulate rep78 foreign
 
 		esttab example311 using test311.tex, ///
