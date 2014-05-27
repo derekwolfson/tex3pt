@@ -1,10 +1,10 @@
 program tex3pt
-*! version 2.0.1 Derek Wolfson 22may2014
+*! version 2.0.2 Derek Wolfson 27may2014
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
 	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string)] ///
-
+	
 version 12.1	
 
 	**CREATE LOCALS FOR USING AND TABLE SINCE THEY WILL BE CLEARED BY SUBSEQ. SYNTAX CALLS*
@@ -547,20 +547,19 @@ file write `tex_file' ///
 	else {
 		di as txt   	`"(TEX output written to {browse "`using1'.tex"})"'
 	}
-
-	
 end
-
-
-
-
-
 
 **PROGRAM FOR GETTING COLUMN NUMBRS AND DIGITS BEFORE/AFTER 
 pr get_params, rclass
 syntax, table(str)
 quietly{
 preserve 
+	cap which chewfile
+	if _rc!=0{
+	di as error "Tex3pt requires the SSC command chewfile." _n ///
+	"Please install chewfile ({stata ssc install chewfile}) and try again."
+	exit 162
+	}
 chewfile using "`table'", parse("&") semiclear
 local NUM = c(k)
 ret sca NUMBEROFCOLUMNS = c(k)-1
