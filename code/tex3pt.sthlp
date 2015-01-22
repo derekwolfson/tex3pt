@@ -18,13 +18,13 @@
 {p 8 17 2}
 {cmdab:tex3pt}
 {it:table}
-{bf:using} {it:filename}
-[{it:, options}]
+{cmd:using} {it:filename}
+[{cmd:,} {it:options}]
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Table Specific Options}
+{syntab:Table-Specific Options}
 {synopt:{opt title}({it:string})} specify a title for the table{p_end}
 {synopt:{opt tlab:el}({it:string})} specify a LaTeX label for the table{p_end}
 {synopt:{opt note}({it:string})} specify notes for the below the table{p_end}
@@ -61,7 +61,7 @@ to compile many tables in a single LaTeX document easily.
 {marker options}{...}
 {title:Options}
 
-{dlgtab:Table Specific Options}
+{dlgtab:Table-Specific Options}
 
 {phang}
 {opt title}{bf:({it:string})} takes a string argument and inserts it 
@@ -159,7 +159,7 @@ one inch.  The user must specify a {it:size} that LaTeX understands, such as 15m
 {phang}
 {opt font}{bf:({it:fontpackage}[, fopt({it:packageoptions})])} sets the text font for the document.
 For example, the option font(lmodern) will set the font of your document to Latin Modern by writing 
-\usepackage{lmodern} to the preamble.  The option font(comfortaa, fontoption(default)) will set the 
+\usepackage{lmodern} to the preamble.  The option font(comfortaa, fopt(default)) will set the 
 font to Comfortaa with the default option by writing \usepackage[default]{comfortaa} to the preamble.  
 If the option font is not specified then the font Libertine (i.e. \usepackage{libertine}), which 
 is the author of this .ado's favorite LaTeX font.
@@ -167,18 +167,20 @@ is the author of this .ado's favorite LaTeX font.
 {phang}
 {opt mathfont}{bf:({it:mathfontpackage}[, mfopt({it:packageoptions})])} sets the math font 
 for the document. For example, the option mathfont(eulervm) will set the math font of your document to Euler
-Virtual Math by writing \usepackage{eulervm} to the preamble.  The option mathfont(eulervm, fontoption(small, euler-digits)) 
+Virtual Math by writing \usepackage{eulervm} to the preamble.  The option mathfont(eulervm, mfopt(small, euler-digits)) 
 will set the math font to Euler Virtual Math using the small and euler-digits options by writing
 \usepackage[small, euler-digits]{eulervm} to the preamble.  If the option font is not specified the default 
 LaTeX math font Computer Modern is used.
 
-{dlgtab:Added {cmd:estout} syntax...}
-{phang}
-The LaTeX preamble that this command writes includes the user-written command {it:\specialcell{}}.  With special cell you can specify line breaks.
-This is especially helpful when you want to have complex column titles.  For example if you define a column title in esttab as "Foreign Cars (Non-Rotary)" 
-it will be problematic for LaTeX since it will not add any line in the column title.  You can get around this by using the {it:specialcell} syntax. The correct syntax for 
-the column title above would be specialcell{Foreign Cars \\ (Non-Rotary)} will create a column title across two lines with the break defined where you enter "\\".
-See example 2.1 for an example of this syntax in practice.   
+{dlgtab:\specialcell{} syntax}
+
+{pstd}
+The LaTeX preamble that this command writes includes the user-written LaTeX command \specialcell{}.  With \specialcell{} you can specify line breaks.
+This is especially helpful when you want to have complex column titles.  For example if you define a column title in {cmd:esttab} as "Foreign Cars (Non-Rotary)" 
+it will be problematic for LaTeX since it will not add any line in the column title.  You can get around this by using the \specialcell{} syntax. The correct syntax for 
+the column title above is \specialcell{Foreign Cars \\ (Non-Rotary)}.  \specialcell{} will create a column title with line breaks defined at each "\\".
+Example 2.1 uses this syntax.
+
 {marker remarks}{...}
 {title:Remarks}
 
@@ -187,22 +189,22 @@ This package is intended to work with {cmd:esttab}.  If you do not have this pac
 {stata ssc install estout:ssc install estout} to install the {cmd:estout} package (which includes {cmd:esttab}).
 
 {pstd}
-To use this package with {cmd:esttab} output you must supply the options {it:booktabs fragment} or {it:tex fragment} to {cmd: esttab}.  
-This is the format that {cmd: tex3pt} expects, and it will not work otherwise. This package is not currently compatible with the 
+To use this package with {cmd:esttab} output you must supply the options {it:booktabs fragment} or {it:tex fragment} to {cmd:esttab}.  
+This is the format that {cmd:tex3pt} expects, and it will not work otherwise. This package is not currently compatible with the 
 LaTeX package longtable, however a solution is in the works.
 
 {pstd}
-	This package extracts all the necessary input directly from the .tex file it is inputting, so there is no
-	need to run {cmd: tex3pt} right after your {cmd: esttab} calls.  The key component of this program is 
-	writing the following in a .tex document:\estauto{{it:table}}{{it:#1}}{S[table-format={it:#2}.{it:#3}}
-	where {it:table} is the file that you created using {cmd: esttab}, {it:#1} is the number of columns in your table not 
-	including the first column of variable names, {it:#2} is the maximum number of digits before the decimal
-	point in your table and {it:#3} is the maximum number of digits after the decimal point in your table. These
-	parameters are key to creating a nicely aligned table.  This program extracts these parameters 
-	from the raw .tex input and the {cmd: tex3pt} call.{p_end}
+This package extracts all the necessary input directly from the .tex file it is inputting, so there is no
+need to run {cmd:tex3pt} right after your {cmd:esttab} calls.  The key component of this program is 
+writing the following in a .tex document: \estauto{{it:table}}{{it:#1}}{S[table-format={it:#2}.{it:#3} ]}
+where {it:table} is the file that you created using {cmd:esttab}, {it:#1} is the number of columns in your table not 
+including the first column of variable names, {it:#2} is the maximum number of digits before the decimal
+point in your table and {it:#3} is the maximum number of digits after the decimal point in your table. These
+parameters are key to creating a nicely aligned table.  This program extracts these parameters 
+from the raw .tex input and the {cmd:tex3pt} call.{p_end}
 
 {pstd}
-{cmd: Tex3pt} was specifically set up to deal with regressions, so if we use it for tabulation or 
+{cmd:Tex3pt} was specifically set up to deal with regressions, so if we use it for tabulation or 
 summary statistics tables we have to ensure that the text for the column headers are encased in the 
 environment "\multicolumn{#}{c}{{it:columnheaders}}".  You can do this by using the prefix and suffix options
 for the {bf:collabel} and {bf:eqlabel} options for {cmd:esttab}.  See the examples for usage of the prefix and 
@@ -219,7 +221,7 @@ avoid errors. The input "\" will be replace with "\text{\}" in these strings. {p
 
 {pstd}
 At the moment the {bf:compile} option only works on Windows machines.  On the Macs I've tested the {cmd:shell} command 
-for stata opens an X11 shell, which does not allow a simple -pdflatex- call.  If you have any solutions to this problem 
+for Stata opens an X11 shell, which does not allow a simple -pdflatex- call.  If you have any solutions to this problem 
 please let me know.
 
 {marker examples}{...}
@@ -386,8 +388,8 @@ you may find and remove these files.
 			title("Tabulation Table")
 
 		{pmore}
-		{bf:Note}: If your tabulation includes any values >=1000 they will be interpreted by esttab as "1,000".  Those commas will be problematic for the
-		alignment of table.  Add the option substitute("," "") to the {cmd: esttab} call to erase those commas.  
+		{bf:Note}: If your tabulation includes any values >=1000 they will be interpreted by {cmd:esttab} as "1,000".  Those commas will be problematic for the
+		alignment of table.  Add the option substitute("," "") to the {cmd:esttab} call to erase those commas.  
 
 
 {marker author}{...}
