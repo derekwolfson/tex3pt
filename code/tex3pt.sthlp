@@ -161,8 +161,7 @@ one inch.  The user must specify a {it:size} that LaTeX understands, such as 15m
 For example, the option font(lmodern) will set the font of your document to Latin Modern by writing 
 \usepackage{lmodern} to the preamble.  The option font(comfortaa, fopt(default)) will set the 
 font to Comfortaa with the default option by writing \usepackage[default]{comfortaa} to the preamble.  
-If the option font is not specified then the font Libertine (i.e. \usepackage{libertine}), which 
-is the author of this .ado's favorite LaTeX font.
+If the option font is not specified then the document will use the default LaTeX font.
 
 {phang}
 {opt mathfont}{bf:({it:mathfontpackage}[, mfopt({it:packageoptions})])} sets the math font 

@@ -83,7 +83,7 @@ version 12.1
 	syntax [anything(name=fontname)], [FOPT(string)]
 	
 		if "`fontname'"==""{
-			local textfont `"\usepackage{libertine}"'
+			local textfont `"%DEFAULT"'
 		}
 		if "`fontname'"!="" & "`fopt'"==""{
 			local textfont `"\usepackage{`fontname'}"'
