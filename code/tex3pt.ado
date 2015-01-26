@@ -454,7 +454,7 @@ cap file close `tex_file'
 file open `tex_file' using "`using1'.tex", write append
 file write `tex_file' ///
 	"%==================BEGIN TABLE=================%" _n ///
-	"%= `title' =%" _n 																/// USES TITLE MACRO HERE
+	"%= `macval(title)' =%" _n 																/// USES TITLE MACRO HERE
 	"%==============================================%" _n ///
 
 	**INCLUDE LANDSCAPE OPENING**
@@ -466,7 +466,7 @@ file write `tex_file' ///
 	file write `tex_file' ///
 		"\begin{table}\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
 		"  \begin{threeparttable}" _n ///	
-		"    \caption{`tablelabel'`title'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
+		"    \caption{`tablelabel'`macval(title)'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
 		`"	`macval(starnote)' "' _n														/// USES STARNOTE MACRO HERE
 
