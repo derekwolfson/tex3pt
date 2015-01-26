@@ -254,20 +254,19 @@ foreach string in title note{
 	}
 }
 
-		**BREAK NOTE INTO LINES**
-			local notelines = 0
-			if `"`note'"'!=""{
-			local ++notelines
-			gettoken part rest: note, parse(",")
-			local note`notelines' `"`part'"'
-			 
-			 while `"`rest'"'!="" {
-			  local ++notelines 
-			  gettoken part rest: rest, parse(",")
-			  gettoken part rest: rest, parse(",")
-			  local note`notelines' `"`part'"'
-			 }
-			}
+**BREAK NOTE INTO LINES**
+tokenize `"`note'"', parse(",")
+local token = 1
+local notelines = 1
+while "``token''" != "" {
+ if "``token''" == "," {
+  local ++notelines
+ }
+ else {
+  local note`notelines' = "`note`notelines'' ``token''"
+ }
+ local ++token
+}
 	
 **DEFINE TEMPNAME FOR FILE HANDLE**
 tempname tex_file
