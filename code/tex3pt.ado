@@ -293,10 +293,8 @@ cap file close `tex_file'
 	`"% Originally written on: `c(current_date)' `c(current_time)'"' _n ///
 	`"%==============================================%"' _n _n _n ///
 	`"\documentclass[11pt]{article}% Your documentclass"' _n ///
-	`"\usepackage{longtable}"' _n ///
 	`"\usepackage{verbatim}"' _n ///
 	`"\usepackage[margin=`MARGINSIZE']{geometry}"' _n /// USES MARGINSIZE MACRO
-	`"\usepackage{pdflscape}"' _n ///
 	`"\usepackage{dcolumn}"' _n ///
 	`"\usepackage{comment}"' _n ///
 	`"\usepackage{fancyhdr}"' _n 
