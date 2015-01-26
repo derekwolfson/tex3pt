@@ -178,16 +178,16 @@ version 12.1
 		local starnote ""
 	}
 	else if "`stars'"=="ols"{
-		local starnote "\Figtext{{`notefontsize' Standard errors in parentheses. * $p<.10$, ** $p<.05$, *** $p<.01$.}}"
+		local starnote "\Figtext{{`notefontsize' Standard errors in parentheses. * \${p<.10}$, ** \${p<.05}$, *** \${p<.01}$.}}"
 	}
 	else if "`stars'"=="robust"{
-		local starnote "\Figtext{{`notefontsize' Heteroskedasticity-robust standard errors in parentheses. * $p<.10$, ** $p<.05$, *** $p<.01$.}}"
+		local starnote "\Figtext{{`notefontsize' Heteroskedasticity-robust standard errors in parentheses. * \${p<.10}$, ** \${p<.05}$, *** \${p<.01}$.}}"
 	}
 	tokenize "`stars'"
 	local stars1 `1'
 	local stars2 `2'
 	else if "`stars1'"=="cluster"{
-		local starnote "\Figtext{{`notefontsize' Standard errors clustered by `2' in parentheses. * $p<.10$, ** $p<.05$, *** $p<.01$.}}"
+		local starnote "\Figtext{{`notefontsize' Standard errors clustered by `2' in parentheses. * \${p<.10}$, ** \${p<.05}$, *** \${p<.01}$.}}"
 	}
 	else {
 	di as error "Syntax error: stars option undefined.  Stars option must be either ols, robust or cluster clustervar."
@@ -470,7 +470,7 @@ file write `tex_file' ///
 		"  \begin{threeparttable}" _n ///	
 		"    \caption{`tablelabel'`title'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
-		`"	`starnote' "' _n														/// USES STARNOTE MACRO HERE
+		`"	`macval(starnote)' "' _n														/// USES STARNOTE MACRO HERE
 
 
 	
