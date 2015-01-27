@@ -393,7 +393,7 @@ cap file close `tex_file'
 	"" _n ///
 	"\newcommand{\estwide}[3]{" _n ///
 	"		\vspace{.75ex}{" _n ///
-	"			\textsymbols% Note the added command here" _n ///
+	"			\textsymbols" _n ///
 	"			\begin{tabular*}" _n ///
 	"			{\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}" _n ///
 	"			\toprule" _n ///
@@ -406,7 +406,7 @@ cap file close `tex_file'
 	"" _n ///
 	"\newcommand{\estwideland}[3]{" _n ///
 	"		\vspace{.75ex}{" _n ///
-	"			\textsymbols% Note the added command here" _n ///
+	"			\textsymbols" _n ///
 	"			\begin{tabular*}" _n ///
 	"			{\linewidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}" _n ///
 	"			\toprule" _n ///
@@ -419,7 +419,7 @@ cap file close `tex_file'
 	"" _n ///
 	"\newcommand{\estauto}[3]{" _n ///
 	"		\vspace{.75ex}{" _n ///
-	"			\textsymbols% Note the added command here" _n ///
+	"			\textsymbols" _n ///
 	"			\begin{tabular}{l*{#2}{#3}}" _n ///
 	"			\toprule" _n ///
 	"			\estinput{#1}" _n ///
