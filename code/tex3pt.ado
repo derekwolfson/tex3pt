@@ -235,7 +235,19 @@ version 12.1
 	forvalues i = 2 / `N_ALIGN'{
 	loc DBEFOREDEC	= r(COL`i'_C1)
 	local DAFTERDEC = r(COL`i'_C2)
-	local COLALIGN `COLALIGN' S[table-format=`DBEFOREDEC'.`DAFTERDEC' `columnwidth']
+		if r(COL`i'_STARS) == 3{ 
+			local STARSPACE = ",table-space-text-post=***"
+		}
+		else if r(COL`i'_STARS) == 2{ 
+			local STARSPACE = ",table-space-text-post=**"
+		}
+		else if r(COL`i'_STARS) == 1{ 
+			local STARSPACE = ",table-space-text-post=*"
+		}
+		else{
+			local STARSPACE = ""
+		}
+	local COLALIGN `COLALIGN' S[table-format=`DBEFOREDEC'.`DAFTERDEC' `STARSPACE' `columnwidth']
 	}
 	
 	
@@ -561,6 +573,22 @@ chewfile using "`table'", parse("&") semiclear
 local NUM = c(k)
 ret sca NUMBEROFCOLUMNS = c(k)-1
 
+**CREATE VARIABLE FOR MAX NUMBER OF STARS PER COLUMN**
+forv i=2/`c(k)'{
+gen star`i' = . 
+	replace star`i' = 1 if regexm(var`i',"\\sym{\*}")
+	replace star`i' = 2 if regexm(var`i',"\\sym{\*\*}")
+	replace star`i' = 3 if regexm(var`i',"\\sym{\*\*\*}")
+}
+forv i = 2/`NUM'{
+qui sum star`i' 
+ret sca COL`i'_STARS = r(max)
+}
+
+**EXTRACT X.Y FOR NUMBER OF DIGITS BEFORE AND AFTER DECIMAL POINT
+chewfile using "`table'", parse("&") semiclear
+local NUM = c(k)
+ret sca NUMBEROFCOLUMNS = c(k)-1
 
 forvalues i = 2/`c(k)'{
 drop if regexm(var`i', "^\\multicolumn")
