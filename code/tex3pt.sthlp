@@ -148,7 +148,7 @@ for convenience in the case the user wants to create a self-contained .tex docum
 {opt comp:ile} compiles the .tex file into a .pdf.  This option opens the shell and runs pdflatex.
 This option requires that the option {it:enddoc} or {it:page} is also called.  This option all cleans up
 any auxilary files created by pdflatex so that only the .tex and .pdf file remain. This option only works on Windows 
-PCs.
+and OS X.
 
 {phang}
 {opt marg:ins}{bf:({it:size})} sets the margins for the document.  The default margins are 1.5cm to allow 
@@ -217,11 +217,6 @@ commas from your output by simply including the option substitute("," "") in {cm
 {pstd}
 This package replaces special LaTeX characters like "$" with "\$" in the {it:notes} and {it:title} strings to 
 avoid errors. The input "\" will be replace with "\text{\}" in these strings. {p_end}
-
-{pstd}
-At the moment the {bf:compile} option only works on Windows machines.  On the Macs I've tested the {cmd:shell} command 
-for Stata opens an X11 shell, which does not allow a simple -pdflatex- call.  If you have any solutions to this problem 
-please let me know.
 
 {marker examples}{...}
 {title:Examples}
