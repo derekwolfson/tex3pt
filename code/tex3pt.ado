@@ -255,7 +255,7 @@ foreach string in title note{
 }
 
 **BREAK NOTE INTO LINES**
-tokenize `"`note'"', parse(",")
+tokenize `"`macval(note)'"', parse(",")
 local token = 1
 local notelines = 1
 while "``token''" != "" {
@@ -263,7 +263,7 @@ while "``token''" != "" {
   local ++notelines
  }
  else {
-  local note`notelines' = "`note`notelines'' ``token''"
+  local note`notelines' = "`macval(note`notelines')' `macval(`token')'"
  }
  local ++token
 }
@@ -474,7 +474,7 @@ file write `tex_file' ///
 	**WRITE NOTES**
 		forvalues i = 1/`notelines'{
 			file write `tex_file' ///
-		`"\Figtext{{`notefontsize' `note`i''}} %%TABLE NOTE"' _n 										// USES NOTE & NOTEFONTSIZE MACRO HERE
+		`"\Figtext{{`notefontsize' `macval(note`i')'}} %%TABLE NOTE"' _n 										// USES NOTE & NOTEFONTSIZE MACRO HERE
 			}
 			
 	**FINISH TABLE**
