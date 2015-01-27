@@ -178,16 +178,16 @@ version 12.1
 		local starnote ""
 	}
 	else if "`stars'"=="ols"{
-		local starnote "\Figtext{{`notefontsize' Standard errors in parentheses. * $p<.10$, ** $p<.05$, *** $p<.01$.}}"
+		local starnote "\Figtext{{`notefontsize' Standard errors in parentheses. *~\${p<.10}$, **~\${p<.05}$, ***~\${p<.01}$.}}"
 	}
 	else if "`stars'"=="robust"{
-		local starnote "\Figtext{{`notefontsize' Heteroskedasticity-robust standard errors in parentheses. * $p<.10$, ** $p<.05$, *** $p<.01$.}}"
+		local starnote "\Figtext{{`notefontsize' Heteroskedasticity-robust standard errors in parentheses. *~\${p<.10}$, **~\${p<.05}$, ***~\${p<.01}$.}}"
 	}
 	tokenize "`stars'"
 	local stars1 `1'
 	local stars2 `2'
 	else if "`stars1'"=="cluster"{
-		local starnote "\Figtext{{`notefontsize' Standard errors clustered by `2' in parentheses. * $p<.10$, ** $p<.05$, *** $p<.01$.}}"
+		local starnote "\Figtext{{`notefontsize' Standard errors clustered by `2' in parentheses. *~\${p<.10}$, **~\${p<.05}$, ***~\${p<.01}$.}}"
 	}
 	else {
 	di as error "Syntax error: stars option undefined.  Stars option must be either ols, robust or cluster clustervar."
@@ -254,20 +254,19 @@ foreach string in title note{
 	}
 }
 
-		**BREAK NOTE INTO LINES**
-			local notelines = 0
-			if `"`note'"'!=""{
-			local ++notelines
-			gettoken part rest: note, parse(",")
-			local note`notelines' `"`part'"'
-			 
-			 while `"`rest'"'!="" {
-			  local ++notelines 
-			  gettoken part rest: rest, parse(",")
-			  gettoken part rest: rest, parse(",")
-			  local note`notelines' `"`part'"'
-			 }
-			}
+**BREAK NOTE INTO LINES**
+tokenize `"`macval(note)'"', parse(",")
+local token = 1
+local notelines = 1
+while "``token''" != "" {
+ if "``token''" == "," {
+  local ++notelines
+ }
+ else {
+  local note`notelines' = "`macval(note`notelines')' `macval(`token')'"
+ }
+ local ++token
+}
 	
 **DEFINE TEMPNAME FOR FILE HANDLE**
 tempname tex_file
@@ -293,10 +292,8 @@ cap file close `tex_file'
 	`"% Originally written on: `c(current_date)' `c(current_time)'"' _n ///
 	`"%==============================================%"' _n _n _n ///
 	`"\documentclass[11pt]{article}% Your documentclass"' _n ///
-	`"\usepackage{longtable}"' _n ///
 	`"\usepackage{verbatim}"' _n ///
 	`"\usepackage[margin=`MARGINSIZE']{geometry}"' _n /// USES MARGINSIZE MACRO
-	`"\usepackage{pdflscape}"' _n ///
 	`"\usepackage{dcolumn}"' _n ///
 	`"\usepackage{comment}"' _n ///
 	`"\usepackage{fancyhdr}"' _n 
@@ -456,7 +453,7 @@ cap file close `tex_file'
 file open `tex_file' using "`using1'.tex", write append
 file write `tex_file' ///
 	"%==================BEGIN TABLE=================%" _n ///
-	"%= `title' =%" _n 																/// USES TITLE MACRO HERE
+	"%= `macval(title)' =%" _n 																/// USES TITLE MACRO HERE
 	"%==============================================%" _n ///
 
 	**INCLUDE LANDSCAPE OPENING**
@@ -468,16 +465,16 @@ file write `tex_file' ///
 	file write `tex_file' ///
 		"\begin{table}\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
 		"  \begin{threeparttable}" _n ///	
-		"    \caption{`tablelabel'`title'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
+		"    \caption{`tablelabel'`macval(title)'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
-		`"	`starnote' "' _n														/// USES STARNOTE MACRO HERE
+		`"	`macval(starnote)' "' _n														/// USES STARNOTE MACRO HERE
 
 
 	
 	**WRITE NOTES**
 		forvalues i = 1/`notelines'{
 			file write `tex_file' ///
-		`"\Figtext{{`notefontsize' `note`i''}} %%TABLE NOTE"' _n 										// USES NOTE & NOTEFONTSIZE MACRO HERE
+		`"\Figtext{{`notefontsize' `macval(note`i')'}} %%TABLE NOTE"' _n 										// USES NOTE & NOTEFONTSIZE MACRO HERE
 			}
 			
 	**FINISH TABLE**
