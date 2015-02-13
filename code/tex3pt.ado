@@ -3,7 +3,7 @@ program tex3pt
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
-	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string)] ///
+	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string)] ///
 	
 version 12.1	
 
@@ -461,13 +461,6 @@ file write `tex_file' ///
 	file write `tex_file' ///
 		"\begin{landscape}" _n _n
 	}
-	
-	**USE RELATIVE PATH FOR TABLE REFERENCE**
-	if "`relativepath'"!=""{
-		_getfilename "`table1'"
-		local table1 "`relativepath'`r(filename)'"
-	}
-	
 
 	file write `tex_file' ///
 		"\begin{table}\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
@@ -525,18 +518,11 @@ file write `tex_file' ///
 
 	**COMPILE COMPLETED TEX DOCUMENT** (THANKS RAYMOND)
 	if "`compile'"!=""{
-		if "`c(os)'" == "Windows" | "`c(os)'" == "MacOSX" { 
+		if "`c(os)'" == "Windows" { 
 			qui cd "`NWD'"
 			cap rm "`using1'.pdf"
 			*run pdflatex twice for hyperref
-			if "`c(os)'" == "Windows" {
-				!pdflatex "`using1'.tex" & pdflatex "`using1'.tex"
-			}
-			else if "`c(os)'" == "MacOSX" {
-				!PATH=\$PATH:/usr/local/bin:/usr/texbin ///
-					&& pdflatex `using1'.tex ///
-					&& pdflatex `using1'.tex
-			}
+			!pdflatex "`using1'.tex" & pdflatex "`using1'.tex"
 			*erase aux files
 			cap rm "`using1'.log"
 			cap rm "`using1'.aux"
@@ -549,10 +535,10 @@ file write `tex_file' ///
 			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'	
 		}
 
-		else {
-			di as txt   `"(TEX output written to {browse "`using1'.tex"})"'
-			di as error `"(The tex3pt compile option does not currently support `c(os)' at this time)"'
-		}
+	else{
+		di as txt   	`"(TEX output written to {browse "`using1'.tex"})"'
+		di as error `"(The tex3pt compile option does not currently support `c(os)' at this time)"'
+	}
 }
 	**IF COMPILE IS NOT SELECTED**
 	else {
