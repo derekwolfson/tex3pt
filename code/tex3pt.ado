@@ -530,11 +530,18 @@ file write `tex_file' ///
 
 	**COMPILE COMPLETED TEX DOCUMENT** (THANKS RAYMOND)
 	if "`compile'"!=""{
-		if "`c(os)'" == "Windows" { 
+		if "`c(os)'" == "Windows" | "`c(os)'" == "MacOSX" { 
 			qui cd "`NWD'"
 			cap rm "`using1'.pdf"
 			*run pdflatex twice for hyperref
-			!pdflatex "`using1'.tex" & pdflatex "`using1'.tex"
+			if "`c(os)'" == "Windows" {
+				!pdflatex "`using1'.tex" & pdflatex "`using1'.tex"
+			}
+			else if "`c(os)'" == "MacOSX" {
+				!PATH=\$PATH:/usr/local/bin:/usr/texbin ///
+					&& pdflatex "`using1'".tex ///
+					&& pdflatex "`using1'".tex
+			}
 			*erase aux files
 			cap rm "`using1'.log"
 			cap rm "`using1'.aux"
@@ -547,10 +554,10 @@ file write `tex_file' ///
 			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'	
 		}
 
-	else{
-		di as txt   	`"(TEX output written to {browse "`using1'.tex"})"'
-		di as error `"(The tex3pt compile option does not currently support `c(os)' at this time)"'
-	}
+		else {
+			di as txt   `"(TEX output written to {browse "`using1'.tex"})"'
+			di as error `"(The tex3pt compile option does not currently support `c(os)' at this time)"'
+		}
 }
 	**IF COMPILE IS NOT SELECTED**
 	else {
