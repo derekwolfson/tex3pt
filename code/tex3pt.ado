@@ -464,7 +464,7 @@ file write `tex_file' ///
 	
 	**USE RELATIVE PATH FOR TABLE REFERENCE**
 	if "`relativepath'"!=""{
-		_getfilename `table1'
+		_getfilename "`table1'"
 		local table1 "`relativepath'`r(filename)'"
 	}
 	
