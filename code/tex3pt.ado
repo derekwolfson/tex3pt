@@ -464,7 +464,7 @@ file write `tex_file' ///
 	
 	**USE RELATIVE PATH FOR TABLE REFERENCE**
 	if "`relativepath'"!=""{
-		_getfilename `table1'
+		_getfilename "`table1'"
 		local table1 "`relativepath'`r(filename)'"
 	}
 	
@@ -534,8 +534,8 @@ file write `tex_file' ///
 			}
 			else if "`c(os)'" == "MacOSX" {
 				!PATH=\$PATH:/usr/local/bin:/usr/texbin ///
-					&& pdflatex "`using1'".tex ///
-					&& pdflatex "`using1'".tex
+					&& pdflatex `using1'.tex ///
+					&& pdflatex `using1'.tex
 			}
 			*erase aux files
 			cap rm "`using1'.log"
