@@ -43,7 +43,6 @@
 {synopt:{opt page}} equivalent to specifying the options preamble, replace and enddoc {p_end}
 {synopt:{opt comp:ile}} run pdflatex using shell to output .pdf from .tex file{p_end}
 {synopt:{opt marg:ins}({it:size})} specify page margins {p_end}
-{synopt:{opt relative:path}({it:string})} specify a relative path from the new .tex file to the .tex table {p_end}
 
 {synopt:{opt font}({it:fontpackage}[,fopt({it:packageoptions})])} set text font for LaTeX document {p_end}
 
@@ -149,19 +148,13 @@ for convenience in the case the user wants to create a self-contained .tex docum
 {opt comp:ile} compiles the .tex file into a .pdf.  This option opens the shell and runs pdflatex.
 This option requires that the option {it:enddoc} or {it:page} is also called.  This option all cleans up
 any auxilary files created by pdflatex so that only the .tex and .pdf file remain. This option only works on Windows 
-and OS X.
+PCs.
 
 {phang}
 {opt marg:ins}{bf:({it:size})} sets the margins for the document.  The default margins are 1.5cm to allow 
 for extra space for tables.  This option sets all margins to the same value (i.e. top, bottom, left, right) 
 using the LaTeX package geometry.  For example, specifying the option margins(1in) will set all margins to 
 one inch.  The user must specify a {it:size} that LaTeX understands, such as 15mm or 1.5in.
-
-{phang}
-{opt relative:path}{bf:({it:string})} creates a relative, rather than absolute, path from the new .tex file to
-the .tex table.  For example, specifying the option relativepath("./") will cause the new .tex file to look in the
-same folder to find the .tex table produced by {cmd:esttab}.  An absolute path is still required for the
-{cmd:using} parameter.
 
 {phang}
 {opt font}{bf:({it:fontpackage}[, fopt({it:packageoptions})])} sets the text font for the document.
@@ -224,6 +217,11 @@ commas from your output by simply including the option substitute("," "") in {cm
 {pstd}
 This package replaces special LaTeX characters like "$" with "\$" in the {it:notes} and {it:title} strings to 
 avoid errors. The input "\" will be replace with "\text{\}" in these strings. {p_end}
+
+{pstd}
+At the moment the {bf:compile} option only works on Windows machines.  On the Macs I've tested the {cmd:shell} command 
+for Stata opens an X11 shell, which does not allow a simple -pdflatex- call.  If you have any solutions to this problem 
+please let me know.
 
 {marker examples}{...}
 {title:Examples}
