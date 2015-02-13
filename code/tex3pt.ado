@@ -3,7 +3,7 @@ program tex3pt
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
-	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string)] ///
+	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) FLOATPLACEMENT(string)] ///
 	
 version 12.1	
 
@@ -463,7 +463,7 @@ file write `tex_file' ///
 	}
 
 	file write `tex_file' ///
-		"\begin{table}\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
+		"\begin{table}[`floatplacement']\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
 		"  \begin{threeparttable}" _n ///	
 		"    \caption{`tablelabel'`macval(title)'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
