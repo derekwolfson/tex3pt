@@ -3,9 +3,8 @@ program tex3pt
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
-	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] ///
+	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
 
-	
 version 12.1	
 
 	**CREATE LOCALS FOR USING AND TABLE SINCE THEY WILL BE CLEARED BY SUBSEQ. SYNTAX CALLS*
