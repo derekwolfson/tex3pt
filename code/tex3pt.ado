@@ -554,10 +554,17 @@ file write `tex_file' ///
 			cap rm "`using1'.lot"
 			cap rm "`using1'.out"
 			cap rm "`using1'.ttt"
-			qui cd "`CWD'"
+			
 			
 			di as txt `"(TEX output written to {browse "`using1'.tex"})"'
-			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'	
+			confirm file "`using1'.pdf"
+			if _rc{
+			di as error "(Compile failed - Check pdflatex error or compile manually)"
+			}
+			else{
+			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'
+			}
+			qui cd "`CWD'"				
 		}
 
 		else {
