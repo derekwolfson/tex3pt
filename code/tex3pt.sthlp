@@ -43,6 +43,7 @@
 {synopt:{opt page}} equivalent to specifying the options preamble, replace and enddoc {p_end}
 {synopt:{opt comp:ile}} run pdflatex using shell to output .pdf from .tex file{p_end}
 {synopt:{opt marg:ins}({it:size})} specify page margins {p_end}
+{synopt:{opt relative:path}({it:string})} specify a relative path from the new .tex file to the .tex table {p_end}
 
 {synopt:{opt font}({it:fontpackage}[,fopt({it:packageoptions})])} set text font for LaTeX document {p_end}
 
@@ -157,6 +158,12 @@ using the LaTeX package geometry.  For example, specifying the option margins(1i
 one inch.  The user must specify a {it:size} that LaTeX understands, such as 15mm or 1.5in.
 
 {phang}
++{opt relative:path}{bf:({it:string})} creates a relative, rather than absolute, path from the new .tex file to
++the .tex table.  For example, specifying the option relativepath("./") will cause the new .tex file to look in the
++same folder to find the .tex table produced by {cmd:esttab}.  An absolute path is still required for the
++{cmd:using} parameter.
++
++{phang}
 {opt font}{bf:({it:fontpackage}[, fopt({it:packageoptions})])} sets the text font for the document.
 For example, the option font(lmodern) will set the font of your document to Latin Modern by writing 
 \usepackage{lmodern} to the preamble.  The option font(comfortaa, fopt(default)) will set the 
