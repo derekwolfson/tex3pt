@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.3  5sep2014 Derek Wolfson}{...}
+{* *! version 2.0.4  4jun2015 Derek Wolfson}{...}
 {findalias asfradohelp}{...}
 {viewerjumpto "Syntax" "tex3pt##syntax"}{...}
 {viewerjumpto "Description" "tex3pt##description"}{...}
@@ -164,12 +164,12 @@ using the LaTeX package geometry.  For example, specifying the option margins(1i
 one inch.  The user must specify a {it:size} that LaTeX understands, such as 15mm or 1.5in.
 
 {phang}
-+{opt relative:path}{bf:({it:string})} creates a relative, rather than absolute, path from the new .tex file to
-+the .tex table.  For example, specifying the option relativepath("./") will cause the new .tex file to look in the
-+same folder to find the .tex table produced by {cmd:esttab}.  An absolute path is still required for the
-+{cmd:using} parameter.
-+
-+{phang}
+{opt relative:path}{bf:({it:string})} creates a relative, rather than absolute, path from the new .tex file to
+the .tex table.  For example, specifying the option relativepath("./") will cause the new .tex file to look in the
+same folder to find the .tex table produced by {cmd:esttab}.  An absolute path is still required for the
+{cmd:using} parameter.
+
+{phang}
 {opt font}{bf:({it:fontpackage}[, fopt({it:packageoptions})])} sets the text font for the document.
 For example, the option font(lmodern) will set the font of your document to Latin Modern by writing 
 \usepackage{lmodern} to the preamble.  The option font(comfortaa, fopt(default)) will set the 
@@ -416,5 +416,5 @@ You can find the source code for this .ado file at {browse "https://github.com/d
 {pstd} 
 I am extremely grateful to Jorg Weber and all the work he did in creating the wonderful preamble and LaTeX commands that this program uses.  You
 can find all that discourse {browse "http://goo.gl/D2GzNm":here}, {browse "http://goo.gl/iVa3wX":here} and {browse "http://goo.gl/YDv0hH":here}.  
-I also tip my hat to Matt White for help with some of the nuances of this program.  I also thank Raymond Guiteras.
+I also tip my hat to Matt White, Nils Enevoldsen and Raymond Guiteras for help with the program.
 
