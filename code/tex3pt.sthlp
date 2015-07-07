@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.4  4jun2015 Derek Wolfson}{...}
+{* *! version 2.0.5  7jul2015 Derek Wolfson}{...}
 {findalias asfradohelp}{...}
 {viewerjumpto "Syntax" "tex3pt##syntax"}{...}
 {viewerjumpto "Description" "tex3pt##description"}{...}
@@ -228,8 +228,8 @@ contain commas.  Siunitx treats commas as a protected characters in table mode. 
 commas from your output by simply including the option substitute("," "") in {cmd:esttab}.  
 
 {pstd}
-This package replaces special LaTeX characters like "$" with "\$" in the {it:notes} and {it:title} strings to 
-avoid errors. The input "\" will be replace with "\text{\}" in these strings. {p_end}
+As of Version 2.0.5, this package {bf:no longer} replaces special LaTeX characters like "$" with "\$" in the {it:notes} and {it:title} strings to 
+avoid errors. {p_end}
 
 {marker examples}{...}
 {title:Examples}

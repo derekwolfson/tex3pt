@@ -1,5 +1,5 @@
 program tex3pt
-*! version 2.0.4 Derek Wolfson 4jun2015
+*! version 2.0.5 Derek Wolfson 7jul2015
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
@@ -256,7 +256,8 @@ version 12.1
 	local CWD "`c(pwd)'"
 	*NEW WORKING DIRECTORY FOR LATEX*"
 	mata: st_local("NWD", parent_dir(st_local("using1")))
-	
+
+/* REMOVED IN VERSION 
 **SUBSTITUTE SPECIAL LATEX CHARACTERS** NOT WORKING FIX THIS LATER
 foreach string in title note{
 		local `string': subinstr local `string' "\" "\text{\}", all
@@ -265,6 +266,7 @@ foreach string in title note{
 		local `string': subinstr local `string' "`character'" "\\`character'", all
 	}
 }
+*/
 
 **BREAK NOTE INTO LINES**
 tokenize `"`macval(note)'"', parse(",")
