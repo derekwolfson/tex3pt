@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.3  5sep2014 Derek Wolfson}{...}
+{* *! version 2.0.5  7jul2015 Derek Wolfson}{...}
 {findalias asfradohelp}{...}
 {viewerjumpto "Syntax" "tex3pt##syntax"}{...}
 {viewerjumpto "Description" "tex3pt##description"}{...}
@@ -33,6 +33,7 @@
 {synopt:{opt cwidth}({it:width})} specify column width{p_end}
 {synopt:{opt wide}} force table to document linewidth {p_end}
 {synopt:{opt land:scape}} display table on a landscape page {p_end}
+{synopt:{opt floatplacement}({it:size})} specify table float placement options {p_end}
 {synopt:{opt clear:page}} add \clearpage after table insertion {p_end}
 
 
@@ -117,6 +118,11 @@ cwidth and wide are not specified then {cmd:tex3pt} will set the column width au
 {phang}
 {opt land:scape} writes the table on a landscape page using the \begin{landscape} and 
 \end{landscape} tags included by the LaTeX package pdflscapes.
+
+{phang}
+{opt floatplacement} sets {browse "https://www.sharelatex.com/learn/Positioning_images_and_tables#The_table_environment":LaTeX float placement options}.
+For example, floatplacement(!htbp) creates \begin{table}[!htbp]. The default is empty,
+which, in the article class, is equivalent to tbp.
 
 {phang}
 {opt clear:page} forces LaTeX to clear the page after the table is written to the document.
@@ -222,8 +228,8 @@ contain commas.  Siunitx treats commas as a protected characters in table mode. 
 commas from your output by simply including the option substitute("," "") in {cmd:esttab}.  
 
 {pstd}
-This package replaces special LaTeX characters like "$" with "\$" in the {it:notes} and {it:title} strings to 
-avoid errors. The input "\" will be replace with "\text{\}" in these strings. {p_end}
+As of Version 2.0.5, this package {bf:no longer} replaces special LaTeX characters like "$" with "\$" in the {it:notes} and {it:title} strings to 
+avoid errors. {p_end}
 
 {marker examples}{...}
 {title:Examples}
@@ -395,8 +401,7 @@ you may find and remove these files.
 
 {marker author}{...}
 {title:Author}
-	Derek Wolfson, Innovations for Poverty Action
-	{browse "mailto: dwolfson@poverty-action.org":dwolfson@poverty-action.org}
+	Derek Wolfson, UC Berkeley ARE (formerly of Innovations for Poverty Action)
 	{browse "mailto: derekwolfson@gmail.com":derekwolfson@gmail.com}
 
 {marker github}{...}
@@ -410,5 +415,5 @@ You can find the source code for this .ado file at {browse "https://github.com/d
 {pstd} 
 I am extremely grateful to Jorg Weber and all the work he did in creating the wonderful preamble and LaTeX commands that this program uses.  You
 can find all that discourse {browse "http://goo.gl/D2GzNm":here}, {browse "http://goo.gl/iVa3wX":here} and {browse "http://goo.gl/YDv0hH":here}.  
-I also tip my hat to Matt White for help with some of the nuances of this program.  I also thank Raymond Guiteras.
+I also tip my hat to Innovations for Poverty Action, Matt White, Nils Enevoldsen and Raymond Guiteras for help with the program.
 

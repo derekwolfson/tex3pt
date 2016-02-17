@@ -1,10 +1,10 @@
 program tex3pt
-*! version 2.0.3 Derek Wolfson 5sep2014
+*! version 2.0.5 Derek Wolfson 17feb2016
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
-	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string)] ///
-	
+	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
+
 version 12.1	
 
 	**CREATE LOCALS FOR USING AND TABLE SINCE THEY WILL BE CLEARED BY SUBSEQ. SYNTAX CALLS*
@@ -256,7 +256,8 @@ version 12.1
 	local CWD "`c(pwd)'"
 	*NEW WORKING DIRECTORY FOR LATEX*"
 	mata: st_local("NWD", parent_dir(st_local("using1")))
-	
+
+/* REMOVED IN VERSION 
 **SUBSTITUTE SPECIAL LATEX CHARACTERS** NOT WORKING FIX THIS LATER
 foreach string in title note{
 		local `string': subinstr local `string' "\" "\text{\}", all
@@ -265,6 +266,7 @@ foreach string in title note{
 		local `string': subinstr local `string' "`character'" "\\`character'", all
 	}
 }
+*/
 
 **BREAK NOTE INTO LINES**
 tokenize `"`macval(note)'"', parse(",")
@@ -480,9 +482,8 @@ file write `tex_file' ///
 		local table1 "`relativepath'`r(filename)'"
 	}
 	
-
 	file write `tex_file' ///
-		"\begin{table}\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
+		"\begin{table}[`floatplacement']\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
 		"  \begin{threeparttable}" _n ///	
 		"    \caption{`tablelabel'`macval(title)'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
@@ -555,10 +556,17 @@ file write `tex_file' ///
 			cap rm "`using1'.lot"
 			cap rm "`using1'.out"
 			cap rm "`using1'.ttt"
-			qui cd "`CWD'"
+			
 			
 			di as txt `"(TEX output written to {browse "`using1'.tex"})"'
-			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'	
+			confirm file "`using1'.pdf"
+			if _rc{
+			di as error "(Compile failed - Check pdflatex error or compile manually)"
+			}
+			else{
+			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'
+			}
+			qui cd "`CWD'"				
 		}
 
 		else {
@@ -602,7 +610,6 @@ ret sca COL`i'_STARS = r(max)
 **EXTRACT X.Y FOR NUMBER OF DIGITS BEFORE AND AFTER DECIMAL POINT
 chewfile using "`table'", parse("&") semiclear
 local NUM = c(k)
-ret sca NUMBEROFCOLUMNS = c(k)-1
 
 forvalues i = 2/`c(k)'{
 drop if regexm(var`i', "^\\multicolumn")

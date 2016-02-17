@@ -2,7 +2,7 @@
 
 tex3pt is a user-written Stata command that creates LaTeX tables. It postprocesses LaTeX output from the Stata package [estout] [estout], using the LaTeX package [threeparttable] [threeparttable] for better formatting of captions and notes.
 
-# Installation and Updating
+## Installation and Updating
 
 Install with `ssc install tex3pt`.
 
@@ -10,7 +10,7 @@ Check for updates with `adoupdate tex3pt`.
 
 Update with `adoupdate tex3pt, update`.
 
-# Credits
+## Credits
 
 tex3pt is written by Derek Wolfson.
 
