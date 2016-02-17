@@ -1,5 +1,5 @@
 program tex3pt
-*! version 2.0.5 Derek Wolfson 7jul2015
+*! version 2.0.5test Derek Wolfson 17feb2016
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
@@ -482,15 +482,21 @@ file write `tex_file' ///
 		local table1 "`relativepath'`r(filename)'"
 	}
 	
+	**CREATE FLOAT PLACEMENT MACRO
+	if "`floatplacement'" != ""{
+		local fplace "[`floatplacement']"
+	}
+	else{
+		local fplace "" 
+	}
+	
 	file write `tex_file' ///
-		"\begin{table}[`floatplacement']\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE
+		"\begin{table}`fplace'\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE & FLOAT PLACEMENT
 		"  \begin{threeparttable}" _n ///	
 		"    \caption{`tablelabel'`macval(title)'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
 		`"	`macval(starnote)' "' _n														/// USES STARNOTE MACRO HERE
 
-
-	
 	**WRITE NOTES**
 		forvalues i = 1/`notelines'{
 			file write `tex_file' ///
@@ -556,16 +562,21 @@ file write `tex_file' ///
 			cap rm "`using1'.lot"
 			cap rm "`using1'.out"
 			cap rm "`using1'.ttt"
-			
+			macro drop _rc
 			
 			di as txt `"(TEX output written to {browse "`using1'.tex"})"'
+			macro drop rc
 			confirm file "`using1'.pdf"
-			if _rc{
+			if _rc != 0 {
 			di as error "(Compile failed - Check pdflatex error or compile manually)"
 			}
 			else{
 			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'
 			}
+			
+
+			
+			*change directory back to original
 			qui cd "`CWD'"				
 		}
 
