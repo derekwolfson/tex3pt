@@ -186,8 +186,9 @@ version 12.1
 	tokenize "`stars'"
 	local stars1 `1'
 	local stars2 `2'
+	local stars2: subinstr local stars2 "_" "\textunderscore "
 	else if "`stars1'"=="cluster"{
-		local starnote "\Figtext{{`notefontsize' Standard errors clustered by `2' in parentheses. *~\${p<.10}$, **~\${p<.05}$, ***~\${p<.01}$.}}"
+		local starnote "\Figtext{{`notefontsize' Standard errors clustered by `stars2' in parentheses. *~\${p<.10}$, **~\${p<.05}$, ***~\${p<.01}$.}}"
 	}
 	else {
 	di as error "Syntax error: stars option undefined.  Stars option must be either ols, robust or cluster clustervar."
@@ -562,17 +563,17 @@ file write `tex_file' ///
 			cap rm "`using1'.lot"
 			cap rm "`using1'.out"
 			cap rm "`using1'.ttt"
-			macro drop _rc
 			
+			*.tex and .pdf messages
 			di as txt `"(TEX output written to {browse "`using1'.tex"})"'
-			macro drop rc
-			confirm file "`using1'.pdf"
+			cap confirm file "`using1'.pdf"
 			if _rc != 0 {
 			di as error "(Compile failed - Check pdflatex error or compile manually)"
 			}
 			else{
 			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'
 			}
+			
 			
 
 			
