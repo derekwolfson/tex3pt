@@ -401,7 +401,7 @@ you may find and remove these files.
 {marker author}{...}
 {title:Authors}
 	Derek Wolfson, UC Berkeley ARE (formerly of Innovations for Poverty Action)
-	{browse "mailto: derekwolfson@gmail.com":derekwolfson@gmail.com
+	{browse "mailto: derekwolfson@gmail.com":derekwolfson@gmail.com}
 	Nils Enevoldsen, JPAL
 
 {marker github}{...}
