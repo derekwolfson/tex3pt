@@ -1,5 +1,5 @@
 program tex3pt
-*! version 2.0.5test Derek Wolfson 17feb2016
+*! version 2.1.0 Derek Wolfson 17feb2016
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
@@ -573,10 +573,6 @@ file write `tex_file' ///
 			else{
 			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'
 			}
-			
-			
-
-			
 			*change directory back to original
 			qui cd "`CWD'"				
 		}
