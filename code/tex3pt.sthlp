@@ -33,7 +33,7 @@
 {synopt:{opt cwidth}({it:width})} specify column width{p_end}
 {synopt:{opt wide}} force table to document linewidth {p_end}
 {synopt:{opt land:scape}} display table on a landscape page {p_end}
-{synopt:{opt floatplacement}({it:size})} specify table float placement options {p_end}
+{synopt:{opt floatplacement}({it:placement character})} specify table float placement options {p_end}
 {synopt:{opt clear:page}} add \clearpage after table insertion {p_end}
 
 
@@ -121,8 +121,7 @@ cwidth and wide are not specified then {cmd:tex3pt} will set the column width au
 
 {phang}
 {opt floatplacement} sets {browse "https://www.sharelatex.com/learn/Positioning_images_and_tables#The_table_environment":LaTeX float placement options}.
-For example, floatplacement(!htbp) creates \begin{table}[!htbp]. The default is empty,
-which, in the article class, is equivalent to tbp.
+For example, floatplacement(!htbp) creates \begin{table}[!htbp]. If this option is not specified the default float placement parameter (tbp in article class) is used.
 
 {phang}
 {opt clear:page} forces LaTeX to clear the page after the table is written to the document.
