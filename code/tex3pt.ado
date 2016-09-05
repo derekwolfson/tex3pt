@@ -2,66 +2,72 @@ program tex3pt
 *! version 2.1.0 Derek Wolfson 17feb2016
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
-	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
-	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
+	[FONT(string) MATHFONT(string) FONTSIZE(string)  CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
+	[PREamblea(str asis) PREambleb  ENDdoc PACKage(string) PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
 
-version 12.1	
+version 12.1
 
 	**CREATE LOCALS FOR USING AND TABLE SINCE THEY WILL BE CLEARED BY SUBSEQ. SYNTAX CALLS*
 	local table1 : copy loc table
-	local using1 : copy loc using 
-	
+	local using1 : copy loc using
+
 	**IF PAGE IS SELECTED THEN TURN ON REPLACE PREAMBLE ENDDOC**
 	if "`page'"!=""{
 		local replace "replace"
 		local preambleb "preambleb"
 		local enddoc "enddoc"
 	}
-	
+
+	** ERROR if package is added without preamble
+	if "`package'"!="" & "`preambleb'"=="" & "`preamblea'"==""{
+	di as error "Syntax error: Must include option option -preamble- if option -package-  is selected"
+	exit 198
+	}
+
 	**CREATE ERROR IF COMPILE IS USED BUT ENDDOC IS NOT**
 	if "`compile'"!="" & "`enddoc'"==""{
 	di as error "Syntax error: Must include option -enddoc- if option -compile- is selected"
 	exit 198
 	}
-	
+
 	**CREATE ERROR IF PREAMBLE IS USED BUT REPLACE IS NOT**
 	if "`preamblea'"!="" & "`replace'"==""{
 	di as error "Syntax error: Must include option -replace- if option -preamble- is selected"
 	exit 198
 	}
-	
+
 	if "`preambleb'"!="" & "`replace'"==""{
 	di as error "Syntax error: Must include option -replace- if option -preamble- is selected"
 	exit 198
 	}
-	
+
 	**CREATE ERROR IF MFONT OR FONT IS USED BUT PREAMBLE IS NOT**
 	if "`preamblea'"=="" & "`preambleb'"=="" & "`font'"!="" & "`mfont'"!=""{
 	di as error "Syntax error: Must include option -preamble- if option -font- or -mfont- is selected"
 	exit 198
 	}
-	
+
 	if "`preamblea'"=="" & "`preambleb'"=="" & "`font'"!=""{
 	di as error "Syntax error: Must include option -preamble- if option -font- is selected"
 	exit 198
 	}
-	
+
 	if "`preamblea'"=="" & "`preambleb'"=="" & "`mfont'"!=""{
 	di as error "Syntax error: Must include option -preamble- if option -mfont- is selected"
 	exit 198
 	}
-	
-	
+
+
 	**PREAMBLE OPTIONS**
 		**LIST: INCLUDE LIST OF TABLES AT TOP OF DOCUMENT**
-		local list = regexm("`preamblea'", "list")		
+		local list = regexm("`preamblea'", "list")
 			if `list'==0{
 				local listtablelist ""
-			}		
+			}
 			if `list'==1{
 			local listtablelist "\listoftables\clearpage"
 			}
-		
+
 		*FOOTER: INFORMATION ABOUT CREATOR AND CREATION DATE
 		local footer = regexm("`preamblea'", "info")
 		if `footer'==0 & `list'==1{
@@ -75,13 +81,13 @@ version 12.1
 		if "`preamblea'"!=""{
 			local preambleb preambleb
 		}
-		
-		
-	
+
+
+
 	**FONT OPTION**
 	loc 0 : copy loc font
 	syntax [anything(name=fontname)], [FOPT(string)]
-	
+
 		if "`fontname'"==""{
 			local textfont `"%DEFAULT"'
 		}
@@ -92,11 +98,11 @@ version 12.1
 			local textfont `"\usepackage[`fopt']{`fontname'}"'
 		}
 	**END FONT OPTION**
-	
+
 	**MFONT OPTION**
 	loc 0 : copy loc mathfont
 	syntax [anything(name=mfontname)], [MFOPT(string)]
-	
+
 		if "`mfontname'"==""{
 			local mfont `"%DEFAULT"'
 		}
@@ -107,7 +113,7 @@ version 12.1
 			local mfont `"\usepackage[`mfopt']{`mfontname'}"'
 		}
 	**END MFONT OPTION**
-	
+
 version 12.1
 
 **OPTIONS STORED IN LOCALS**
@@ -117,6 +123,14 @@ version 12.1
 	}
 	else{
 	local MARGINSIZE  "1.5cm"
+	}
+
+	**Package**
+	if "`package'"!=""{
+	local PACKAGELIST  "`package'"
+	}
+	else{
+	local PACKAGELIST  ""
 	}
 
 	**FONTSIZE OPTION**
@@ -153,7 +167,7 @@ version 12.1
 			local mathfont "\usepackage[`mathchoice2']{`mathchoice1'}"
 		}
 	**END M(ath)FONT OPTION**
-	
+
 	**TABLE LABEL OPTION**
 	if "`tlabel'"==""{
 		local tablelabel ""
@@ -164,7 +178,7 @@ version 12.1
 	**END TABLE LABEL OPTION**
 
 
-	
+
 	**C(olumn) WIDTH*
 	if "`cwidth'"==""{
 		local columnwidth = ""
@@ -172,7 +186,7 @@ version 12.1
 	else{
 		local columnwidth = ",table-column-width=`cwidth'"
 	}
-	
+
 	**STARS**
 	if "`stars'"==""{
 		local starnote ""
@@ -196,7 +210,7 @@ version 12.1
 	}
 
 	**END STARS**
-	
+
 	**WIDE TABLE**
 	if "`landscape'"==""{
 		if "`wide'"!=""{
@@ -214,35 +228,35 @@ version 12.1
 			local outputtype "auto"
 		}
 	}
-	
+
 **CHANGE \ to / FOR LATEX INPUT**
 	local table1: subinstr local table1 "\" "/", all
 	local using1: subinstr local using1 "\" "/", all
-	
+
 **CHANGE LOCALS TO NOT INCLUDE .tex**
 	local using1: subinstr local using1 ".tex" "", all
 	local table1: subinstr local table1 ".tex" "", all
 	local table1: subinstr local table1 `"""' "", all
 	local table1 "`table1'.tex"
 
-	
-**CREATE LOCAL FOR NUMBER OF COLUMNS & NUMBER OF DIGITS BEFORE AND AFTER DECIMAL POINT** 
+
+**CREATE LOCAL FOR NUMBER OF COLUMNS & NUMBER OF DIGITS BEFORE AND AFTER DECIMAL POINT**
 	get_params, table("`table1'")
 	loc NUMBEROFCOLUMNS = r(NUMBEROFCOLUMNS)
 	loc N_ALIGN = `NUMBEROFCOLUMNS'+1
 	*loc DIGITSBEFOREDECIMAL = r(COUNT1)
 	*loc DIGITSAFTERDECIMAL = r(COUNT2)
-	
+
 	forvalues i = 2 / `N_ALIGN'{
 	loc DBEFOREDEC	= r(COL`i'_C1)
 	local DAFTERDEC = r(COL`i'_C2)
-		if r(COL`i'_STARS) == 3{ 
+		if r(COL`i'_STARS) == 3{
 			local STARSPACE = ",table-space-text-post=***"
 		}
-		else if r(COL`i'_STARS) == 2{ 
+		else if r(COL`i'_STARS) == 2{
 			local STARSPACE = ",table-space-text-post=**"
 		}
-		else if r(COL`i'_STARS) == 1{ 
+		else if r(COL`i'_STARS) == 1{
 			local STARSPACE = ",table-space-text-post=*"
 		}
 		else{
@@ -250,15 +264,15 @@ version 12.1
 		}
 	local COLALIGN `COLALIGN' S[table-format=`DBEFOREDEC'.`DAFTERDEC' `STARSPACE' `columnwidth']
 	}
-	
-	
+
+
 **CREATE WORKING DIRECTORY LOCALS**
 	*CURRENT DIRECTORY*
 	local CWD "`c(pwd)'"
 	*NEW WORKING DIRECTORY FOR LATEX*"
 	mata: st_local("NWD", parent_dir(st_local("using1")))
 
-/* REMOVED IN VERSION 
+/* REMOVED IN VERSION
 **SUBSTITUTE SPECIAL LATEX CHARACTERS** NOT WORKING FIX THIS LATER
 foreach string in title note{
 		local `string': subinstr local `string' "\" "\text{\}", all
@@ -282,10 +296,10 @@ while "``token''" != "" {
  }
  local ++token
 }
-	
+
 **DEFINE TEMPNAME FOR FILE HANDLE**
 tempname tex_file
-**REPLACE OR APPEND**	
+**REPLACE OR APPEND**
 cap file close `tex_file'
 
 	if "`replace'"!=""{
@@ -297,7 +311,7 @@ cap file close `tex_file'
 
 	file open `tex_file' using "`using1'.tex", write `REPLACEORAPPEND'
 	file close `tex_file'
-	
+
 *WRITE PREAMBLE IF OPTION IS ON**
 	if "`preambleb'"!=""{
 	file open `tex_file' using "`using1'.tex", write append
@@ -311,10 +325,15 @@ cap file close `tex_file'
 	`"\usepackage[margin=`MARGINSIZE']{geometry}"' _n /// USES MARGINSIZE MACRO
 	`"\usepackage{dcolumn}"' _n ///
 	`"\usepackage{comment}"' _n ///
-	`"\usepackage{fancyhdr}"' _n 
-	
-	
-	if `footer' == 1{ 
+	`"\usepackage{fancyhdr}"' _n
+	if "`PACKAGELIST'"!=""{
+		foreach pack of local PACKAGELIST{
+			file write `tex_file' ///
+			`"\usepackage{`pack'}"' _n
+		}
+	}
+
+	if `footer' == 1{
 		file write `tex_file' ///
 	`" \fancypagestyle{firststyle}"' _n ///
      "  { " _n ///
@@ -322,9 +341,9 @@ cap file close `tex_file'
      "   \renewcommand{\headrulewidth}{0pt}" _n ///
      "   \fancyfoot[L]{Created by: `c(username)'}" _n ///
      "   \fancyfoot[R]{Created on: `c(current_date)' `c(current_time)'}" _n ///
-     "  }" _n _n 
+     "  }" _n _n
 	 } //end if footer==1
-	 
+
 
 		file write `tex_file' ///
 	`"% Necessary packages"' _n ///
@@ -444,7 +463,7 @@ cap file close `tex_file'
 	"% The new approach using threeparttables to generate notes that are the exact width of the table." _n ///
 	"\newcommand{\Figtext}[1]{%" _n ///
 	"	\begin{tablenotes}[para,flushleft]" _n ///
-	"	{" _n /// 
+	"	{" _n ///
 	"	#1" _n ///
 	"	}" _n ///
 	"	\end{tablenotes}" _n ///
@@ -458,7 +477,7 @@ cap file close `tex_file'
 	"`listtablelist'" _n _n _n _n ///
 	"%=================================================%" _n ///
 	"%============BEGIN TABLE OUTPUT===================%" _n ///
-	"%=================================================%" _n 
+	"%=================================================%" _n
 	file close `tex_file'
 	}
 ***END PREAMBLE***
@@ -476,24 +495,24 @@ file write `tex_file' ///
 	file write `tex_file' ///
 		"\begin{landscape}" _n _n
 	}
-	
+
 	**USE RELATIVE PATH FOR TABLE REFERENCE**
 	if "`relativepath'"!=""{
 		_getfilename "`table1'"
 		local table1 "`relativepath'`r(filename)'"
 	}
-	
+
 	**CREATE FLOAT PLACEMENT MACRO
 	if "`floatplacement'" != ""{
 		local fplace "[`floatplacement']"
 	}
 	else{
-		local fplace "" 
+		local fplace ""
 	}
-	
+
 	file write `tex_file' ///
 		"\begin{table}`fplace'\centering""`fontsizechoice'" _n 								/// USES FONT SIZE MACRO HERE & FLOAT PLACEMENT
-		"  \begin{threeparttable}" _n ///	
+		"  \begin{threeparttable}" _n ///
 		"    \caption{`tablelabel'`macval(title)'} %%TABLE TITLE" _n 						/// USES TITLE MACRO HERE
 		`"    \est`outputtype'{"`table1'"}{`NUMBEROFCOLUMNS'}{`COLALIGN'}"' _n 	/// MACROS: OUTPUTTYPE DIGITSAFTER(BEFORE)DECIMAL COLUMNWIDTH
 		`"	`macval(starnote)' "' _n														/// USES STARNOTE MACRO HERE
@@ -503,13 +522,13 @@ file write `tex_file' ///
 			file write `tex_file' ///
 		`"\Figtext{{`notefontsize' `macval(note`i')'}} %%TABLE NOTE"' _n 										// USES NOTE & NOTEFONTSIZE MACRO HERE
 			}
-			
+
 	**FINISH TABLE**
 		file write `tex_file' ///
 			"  \end{threeparttable}" _n ///
-		"\end{table}" _n  
+		"\end{table}" _n
 	file close `tex_file'
-			
+
 
 	**INCLUDE LANDSCAPE CLOSURE
 		if "`landscape'"!=""{
@@ -545,7 +564,7 @@ file write `tex_file' ///
 
 	**COMPILE COMPLETED TEX DOCUMENT** (THANKS RAYMOND)
 	if "`compile'"!=""{
-		if "`c(os)'" == "Windows" | "`c(os)'" == "MacOSX" { 
+		if "`c(os)'" == "Windows" | "`c(os)'" == "MacOSX" {
 			qui cd "`NWD'"
 			cap rm "`using1'.pdf"
 			*run pdflatex twice for hyperref
@@ -553,7 +572,7 @@ file write `tex_file' ///
 				!pdflatex "`using1'.tex" & pdflatex "`using1'.tex"
 			}
 			else if "`c(os)'" == "MacOSX" {
-				!PATH=\$PATH:/usr/local/bin:/usr/texbin ///
+				!PATH=\$PATH:/usr/local/bin:/usr/texbin:/Library/TeX/texbin ///
 					&& pdflatex "`using1'".tex ///
 					&& pdflatex "`using1'".tex
 			}
@@ -563,7 +582,7 @@ file write `tex_file' ///
 			cap rm "`using1'.lot"
 			cap rm "`using1'.out"
 			cap rm "`using1'.ttt"
-			
+
 			*.tex and .pdf messages
 			di as txt `"(TEX output written to {browse "`using1'.tex"})"'
 			cap confirm file "`using1'.pdf"
@@ -574,7 +593,7 @@ file write `tex_file' ///
 			di as txt `"(PDF output written to {browse "`using1'.pdf"})"'
 			}
 			*change directory back to original
-			qui cd "`CWD'"				
+			qui cd "`CWD'"
 		}
 
 		else {
@@ -588,11 +607,11 @@ file write `tex_file' ///
 	}
 end
 
-**PROGRAM FOR GETTING COLUMN NUMBRS AND DIGITS BEFORE/AFTER 
+**PROGRAM FOR GETTING COLUMN NUMBRS AND DIGITS BEFORE/AFTER
 pr get_params, rclass
 syntax, table(str)
 quietly{
-preserve 
+preserve
 	cap which chewfile
 	if _rc!=0{
 	di as error "Tex3pt requires the SSC command chewfile." _n ///
@@ -605,13 +624,13 @@ ret sca NUMBEROFCOLUMNS = c(k)-1
 
 **CREATE VARIABLE FOR MAX NUMBER OF STARS PER COLUMN**
 forv i=2/`c(k)'{
-gen star`i' = . 
+gen star`i' = .
 	replace star`i' = 1 if regexm(var`i',"\\sym{\*}")
 	replace star`i' = 2 if regexm(var`i',"\\sym{\*\*}")
 	replace star`i' = 3 if regexm(var`i',"\\sym{\*\*\*}")
 }
 forv i = 2/`NUM'{
-qui sum star`i' 
+qui sum star`i'
 ret sca COL`i'_STARS = r(max)
 }
 
@@ -630,7 +649,7 @@ forvalues i = 2/`NUM'{
 	tab n`i'
 	if r(N)==0{
 		ret sca COL`i'_C1 = 1
-		ret sca COL`i'_C2 = 0 
+		ret sca COL`i'_C2 = 0
 	}
 	else{
 		qui split n`i', parse(.) gen(s`i')
