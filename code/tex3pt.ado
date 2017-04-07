@@ -1,5 +1,5 @@
 program tex3pt
-*! version 2.1.0 Derek Wolfson 17feb2016
+*! version 2.1.1 Derek Wolfson 6apr2017
 syntax anything(name=table id="tex table") using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
@@ -278,7 +278,7 @@ while "``token''" != "" {
   local ++notelines
  }
  else {
-  local note`notelines' = "`macval(note`notelines')' `macval(`token')'"
+  local note`notelines' "`macval(note`notelines')' `macval(`token')'"
  }
  local ++token
 }
