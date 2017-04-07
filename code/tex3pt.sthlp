@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.1.0  17feb2016 Derek Wolfson}{...}
+{* *! version 2.1.1  6apr2017 Derek Wolfson}{...}
 {findalias asfradohelp}{...}
 {viewerjumpto "Syntax" "tex3pt##syntax"}{...}
 {viewerjumpto "Description" "tex3pt##description"}{...}
