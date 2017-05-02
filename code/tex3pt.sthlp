@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.1.0  17feb2016 Derek Wolfson}{...}
+{* *! version 3.0 2may2017 Derek Wolfson}{...}
 {findalias asfradohelp}{...}
 {viewerjumpto "Syntax" "tex3pt##syntax"}{...}
 {viewerjumpto "Description" "tex3pt##description"}{...}
@@ -17,7 +17,7 @@
 
 {p 8 17 2}
 {cmdab:tex3pt}
-{it:table}
+[{it:table}]
 {cmd:using} {it:filename}
 [{cmd:,} {it:options}]
 
@@ -38,12 +38,12 @@
 
 
 {syntab:LaTeX Document Options}
-{synopt:{opt pre:amble}[({it:options})]} write .tex preamble {p_end}
+{synopt:{opt pre:amble}[({it:options})]} write .tex preamble.  Can run without {it:table} input to just create preamble.  See Example 4 for why this is helpful. {p_end}
 {synopt:{opt pack:age}({it:packagelist})} adds user specified LaTeX packages to the preamble {p_end}
 {synopt:{opt replace}} replace .tex file {p_end}
-{synopt:{opt end:doc}} write \end{document} at the end of the .tex file {p_end}
+{synopt:{opt end:doc}} write \end{document} at the end of the .tex file.  Can run without {it:table} input to create just \end{document} tag (see Example 4). {p_end}
 {synopt:{opt page}} equivalent to specifying the options preamble, replace and enddoc {p_end}
-{synopt:{opt comp:ile}} run pdflatex using shell to output .pdf from .tex file{p_end}
+{synopt:{opt comp:ile}} run pdflatex using shell to output .pdf from .tex file.  Can run without {it:table} input to compile the {it:using} file (see Example 4). {p_end}
 {synopt:{opt marg:ins}({it:size})} specify page margins {p_end}
 {synopt:{opt relative:path}({it:string})} specify a relative path from the new .tex file to the .tex table {p_end}
 
@@ -402,11 +402,35 @@ you may find and remove these files.
 		alignment of table.  Add the option substitute("," "") to the {cmd:esttab} call to erase those commas.
 
 
+	{pmore}
+	{bf:{ul:Example 4 - Simplifying Programming}}{p_end}
+	{pmore}
+	{it:The example below shows how to use {cmd:tex3pt} within a more dynamic programming environment:}{p_end}
+
+		// create preamble shell file
+		tex3pt using master4.tex, preamble(list info) replace
+
+		// run analysis
+		sysuse auto
+		replace price=price/1000
+		eststo example41: reg price mpg
+		eststo example42: reg price mpg weight
+		esttab example41 using test41.tex, b se fragment booktabs replace
+		esttab example42 using test42.tex, b se fragment booktabs replace
+
+		// add tables to shell file
+		tex3pt "test41.tex" using "master4.tex", title("example 4.1")
+		tex3pt "test42.tex" using "master4.tex", title("example 4.2")
+
+		// end tex3pt file and compile
+		tex3pt using "master4.tex", enddoc compile
+		{pmore}
+
 {marker author}{...}
 {title:Authors}
-	Derek Wolfson, UC Berkeley ARE (formerly of Innovations for Poverty Action)
+	Derek Wolfson, UC Berkeley (formerly of Innovations for Poverty Action)
 	{browse "mailto: derekwolfson@gmail.com":derekwolfson@gmail.com}
-	Nils Enevoldsen, JPAL
+	Nils Enevoldsen, MIT (formerly of EPOD)
 
 {marker github}{...}
 {title:Github}
@@ -420,4 +444,3 @@ You can find the source code for this .ado file at {browse "https://github.com/d
 I am extremely grateful to Jorg Weber and all the work he did in creating the wonderful preamble and LaTeX commands that this program uses.  You
 can find all that discourse {browse "http://goo.gl/D2GzNm":here}, {browse "http://goo.gl/iVa3wX":here} and {browse "http://goo.gl/YDv0hH":here}.
 I also tip my hat to Innovations for Poverty Action, Matt White, Nils Enevoldsen and Raymond Guiteras for help with the program.
-

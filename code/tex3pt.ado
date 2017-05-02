@@ -1,11 +1,11 @@
 program tex3pt
-*! version 2.1.0 Derek Wolfson 17feb2016
-syntax anything(name=table id="tex table") using/, ///
+*! version 3.0 Derek Wolfson 2may2017
+syntax [anything(name=table id="tex table")] using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string)  CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
 	[PREamblea(str asis) PREambleb  ENDdoc PACKage(string) PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
 
-version 12.1
+version 12
 
 	**CREATE LOCALS FOR USING AND TABLE SINCE THEY WILL BE CLEARED BY SUBSEQ. SYNTAX CALLS*
 	local table1 : copy loc table
@@ -57,6 +57,10 @@ version 12.1
 	exit 198
 	}
 
+	if "`preamblea'"=="" & "`preambleb'"=="" & "`enddoc'" == "" &  "`table1'"!=""{
+	di as error "If -using- is not used, then preamble or enddoc must be selected"
+	exit 198
+	}
 
 	**PREAMBLE OPTIONS**
 		**LIST: INCLUDE LIST OF TABLES AT TOP OF DOCUMENT**
@@ -113,9 +117,7 @@ version 12.1
 			local mfont `"\usepackage[`mfopt']{`mfontname'}"'
 		}
 	**END MFONT OPTION**
-
-version 12.1
-
+	
 **OPTIONS STORED IN LOCALS**
 	**MARGIN SIZE**
 	if "`margins'"!=""{
@@ -241,6 +243,7 @@ version 12.1
 
 
 **CREATE LOCAL FOR NUMBER OF COLUMNS & NUMBER OF DIGITS BEFORE AND AFTER DECIMAL POINT**
+if "`table1'" != ".tex"{ // only run if table is specified
 	get_params, table("`table1'")
 	loc NUMBEROFCOLUMNS = r(NUMBEROFCOLUMNS)
 	loc N_ALIGN = `NUMBEROFCOLUMNS'+1
@@ -264,7 +267,7 @@ version 12.1
 		}
 	local COLALIGN `COLALIGN' S[table-format=`DBEFOREDEC'.`DAFTERDEC' `STARSPACE' `columnwidth']
 	}
-
+}
 
 **CREATE WORKING DIRECTORY LOCALS**
 	*CURRENT DIRECTORY*
@@ -292,7 +295,7 @@ while "``token''" != "" {
   local ++notelines
  }
  else {
-  local note`notelines' = "`macval(note`notelines')' `macval(`token')'"
+  local note`notelines' "`macval(note`notelines')' `macval(`token')'"
  }
  local ++token
 }
@@ -484,6 +487,7 @@ cap file close `tex_file'
 
 
 **INCLUDE TABLE**
+if "`table1'" != ".tex"{
 file open `tex_file' using "`using1'.tex", write append
 file write `tex_file' ///
 	"%==================BEGIN TABLE=================%" _n ///
@@ -553,6 +557,7 @@ file write `tex_file' ///
 		file close `tex_file'
 
 **END INCLUDE TABLE**
+}
 
 **ADD \ENDDOCUMENT MARKUP IF OPTION IS SELECTED**
 	if "`enddoc'"!=""{
