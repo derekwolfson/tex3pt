@@ -39,6 +39,7 @@
 
 {syntab:LaTeX Document Options}
 {synopt:{opt pre:amble}[({it:options})]} write .tex preamble.  Can run without {it:table} input to just create preamble.  See Example 4 for why this is helpful. {p_end}
+{synopt:{opt pack:age}({it:packagelist})} adds user specified LaTeX packages to the preamble {p_end}
 {synopt:{opt replace}} replace .tex file {p_end}
 {synopt:{opt end:doc}} write \end{document} at the end of the .tex file.  Can run without {it:table} input to create just \end{document} tag (see Example 4). {p_end}
 {synopt:{opt page}} equivalent to specifying the options preamble, replace and enddoc {p_end}
@@ -138,6 +139,9 @@ The {it:suboptions} include {it:list} and {it:info}.  The {it:list} suboption wi
 (with hyperlinks) as the first page of the document. The {it:info} will write who created
 the document and when the document was created in the first page footer.  The {it:info} suboption requires that you
 also specify the {it:list} suboption.
+
+{phang}
+{opt pack:age}{bf:({it:packagelist})} Adds LaTeX packages from packagelist to the preamble. You must specify the option preamble if you specify the option package.
 
 {phang}
 {opt replace} permits {cmd:tex3pt} to overwrite the {it:using} file.  If replace is not specified then
@@ -396,6 +400,7 @@ you may find and remove these files.
 		{pmore}
 		{bf:Note}: If your tabulation includes any values >=1000 they will be interpreted by {cmd:esttab} as "1,000".  Those commas will be problematic for the
 		alignment of table.  Add the option substitute("," "") to the {cmd:esttab} call to erase those commas.
+
 
 	{pmore}
 	{bf:{ul:Example 4 - Simplifying Programming}}{p_end}

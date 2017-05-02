@@ -2,8 +2,8 @@ program tex3pt
 *! version 3.0 Derek Wolfson 2may2017
 syntax [anything(name=table id="tex table")] using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
-	[FONT(string) MATHFONT(string) FONTSIZE(string) CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
-	[PREamblea(str asis) PREambleb  ENDdoc PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
+	[FONT(string) MATHFONT(string) FONTSIZE(string)  CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
+	[PREamblea(str asis) PREambleb  ENDdoc PACKage(string) PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
 
 version 12
 
@@ -16,6 +16,12 @@ version 12
 		local replace "replace"
 		local preambleb "preambleb"
 		local enddoc "enddoc"
+	}
+
+	** ERROR if package is added without preamble
+	if "`package'"!="" & "`preambleb'"=="" & "`preamblea'"==""{
+	di as error "Syntax error: Must include option option -preamble- if option -package-  is selected"
+	exit 198
 	}
 
 	**CREATE ERROR IF COMPILE IS USED BUT ENDDOC IS NOT**
@@ -51,11 +57,10 @@ version 12
 	exit 198
 	}
 
-	if "`preamblea'"=="" & "`preambleb'"=="" & "`table1'"!=""{
-	di as error "If -using- is not used, then preamble must be selected"
+	if "`preamblea'"=="" & "`preambleb'"=="" & "`enddoc'" == "" &  "`table1'"!=""{
+	di as error "If -using- is not used, then preamble or enddoc must be selected"
 	exit 198
 	}
-
 
 	**PREAMBLE OPTIONS**
 		**LIST: INCLUDE LIST OF TABLES AT TOP OF DOCUMENT**
@@ -112,9 +117,7 @@ version 12
 			local mfont `"\usepackage[`mfopt']{`mfontname'}"'
 		}
 	**END MFONT OPTION**
-
-version 12.1
-
+	
 **OPTIONS STORED IN LOCALS**
 	**MARGIN SIZE**
 	if "`margins'"!=""{
@@ -122,6 +125,14 @@ version 12.1
 	}
 	else{
 	local MARGINSIZE  "1.5cm"
+	}
+
+	**Package**
+	if "`package'"!=""{
+	local PACKAGELIST  "`package'"
+	}
+	else{
+	local PACKAGELIST  ""
 	}
 
 	**FONTSIZE OPTION**
@@ -318,7 +329,12 @@ cap file close `tex_file'
 	`"\usepackage{dcolumn}"' _n ///
 	`"\usepackage{comment}"' _n ///
 	`"\usepackage{fancyhdr}"' _n
-
+	if "`PACKAGELIST'"!=""{
+		foreach pack of local PACKAGELIST{
+			file write `tex_file' ///
+			`"\usepackage{`pack'}"' _n
+		}
+	}
 
 	if `footer' == 1{
 		file write `tex_file' ///
@@ -561,7 +577,7 @@ file write `tex_file' ///
 				!pdflatex "`using1'.tex" & pdflatex "`using1'.tex"
 			}
 			else if "`c(os)'" == "MacOSX" {
-				!PATH=\$PATH:/usr/local/bin:/usr/texbin ///
+				!PATH=\$PATH:/usr/local/bin:/usr/texbin:/Library/TeX/texbin ///
 					&& pdflatex "`using1'".tex ///
 					&& pdflatex "`using1'".tex
 			}
