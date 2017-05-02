@@ -29,7 +29,7 @@ tex3pt using "test.tex", enddoc compile
 
 		// create preamble shell file
 		clear
-		tex3pt using master4.tex, preamble(list info) replace
+		tex3pt using master4.tex, preamble(list info) package(comment) replace
 		
 		// run analysis
 		sysuse auto
