@@ -57,8 +57,8 @@ version 12
 	exit 198
 	}
 
-	if "`preamblea'"=="" & "`preambleb'"=="" & "`enddoc'" == "" &  "`table1'"!=""{
-	di as error "If -using- is not used, then preamble or enddoc must be selected"
+	if "`preamblea'"=="" & "`preambleb'"=="" & "`enddoc'" == "" &  `"`table1'"'==`""'{
+	di as error "If -table- is not used, then preamble or enddoc must be selected"
 	exit 198
 	}
 

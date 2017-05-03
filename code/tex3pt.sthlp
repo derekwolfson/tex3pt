@@ -443,4 +443,4 @@ You can find the source code for this .ado file at {browse "https://github.com/d
 {pstd}
 I am extremely grateful to Jorg Weber and all the work he did in creating the wonderful preamble and LaTeX commands that this program uses.  You
 can find all that discourse {browse "http://goo.gl/D2GzNm":here}, {browse "http://goo.gl/iVa3wX":here} and {browse "http://goo.gl/YDv0hH":here}.
-I also tip my hat to Innovations for Poverty Action, Matt White, Nils Enevoldsen and Raymond Guiteras for help with the program.
+I also tip my hat to Innovations for Poverty Action, Matt White and Raymond Guiteras for help with the program and Roy Wada for writing -chewfile-.
