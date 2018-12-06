@@ -1,5 +1,5 @@
 program tex3pt
-*! version 3.0 Derek Wolfson 2may2017
+*! version 3.1 Derek Wolfson 5dec2018
 syntax [anything(name=table id="tex table")] using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string)  CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
