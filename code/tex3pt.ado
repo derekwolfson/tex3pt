@@ -623,7 +623,13 @@ preserve
 	"Please install chewfile ({stata ssc install chewfile}) and try again."
 	exit 162
 	}
+qui describe
+if `r(k)' != 0{
 chewfile using "`table'", parse("&") semiclear
+}
+else{ 
+chewfile using "`table'", parse("&") clear
+}
 local NUM = c(k)
 ret sca NUMBEROFCOLUMNS = c(k)-1
 
