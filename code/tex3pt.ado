@@ -1,9 +1,9 @@
 program tex3pt
-*! version 3.1 Derek Wolfson 5dec2018
+*! version 3.1.1 Derek Wolfson 1jan2022
 syntax [anything(name=table id="tex table")] using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string)  CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
-	[PREamblea(str asis) PREambleb  ENDdoc PACKage(string) PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
+	[PREamblea(str asis) PREambleb  ENDdoc PACKage(string) PAGE LANDscape CLEARpage COMPile STARs(string) MARGins(string) PAPERsize(string) RELATIVEpath(string) FLOATPLACEMENT(string)] //
 
 version 12
 
@@ -125,6 +125,12 @@ version 12
 	}
 	else{
 	local MARGINSIZE  "1.5cm"
+	}
+	if "`papersize'"==""{
+	local GEOMETRYOPT  "margins = `MARGINSIZE'"
+	}
+	else if "`papersize'"!=""{
+	local GEOMETRYOPT "margins = `MARGINSIZE', paper = `papersize'"
 	}
 
 	**Package**
@@ -325,7 +331,7 @@ cap file close `tex_file'
 	`"%==============================================%"' _n _n _n ///
 	`"\documentclass[11pt]{article}% Your documentclass"' _n ///
 	`"\usepackage{verbatim}"' _n ///
-	`"\usepackage[margin=`MARGINSIZE']{geometry}"' _n /// USES MARGINSIZE MACRO
+	`"\usepackage[`GEOMETRYOPT'']{geometry}"' _n /// USES MARGINSIZE MACRO
 	`"\usepackage{dcolumn}"' _n ///
 	`"\usepackage{comment}"' _n ///
 	`"\usepackage{fancyhdr}"' _n
