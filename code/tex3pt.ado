@@ -331,7 +331,7 @@ cap file close `tex_file'
 	`"%==============================================%"' _n _n _n ///
 	`"\documentclass[11pt]{article}% Your documentclass"' _n ///
 	`"\usepackage{verbatim}"' _n ///
-	`"\usepackage[margins = `MARGINSIZE', paper = `PAPERSIZE']{geometry}"' _n /// USES MARGINSIZE MACRO
+	`"\usepackage[margin = `MARGINSIZE', paper = `PAPERSIZE']{geometry}"' _n /// USES MARGINSIZE MACRO
 	`"\usepackage{dcolumn}"' _n ///
 	`"\usepackage{comment}"' _n ///
 	`"\usepackage{fancyhdr}"' _n
