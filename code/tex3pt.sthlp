@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 3.1 5dec2018 Derek Wolfson}{...}
+{* *! version 3.2 1apr2022 Derek Wolfson}{...}
 {findalias asfradohelp}{...}
 {viewerjumpto "Syntax" "tex3pt##syntax"}{...}
 {viewerjumpto "Description" "tex3pt##description"}{...}
@@ -45,11 +45,11 @@
 {synopt:{opt page}} equivalent to specifying the options preamble, replace and enddoc {p_end}
 {synopt:{opt comp:ile}} run pdflatex using shell to output .pdf from .tex file.  Can run without {it:table} input to compile the {it:using} file (see Example 4). {p_end}
 {synopt:{opt marg:ins}({it:size})} specify page margins {p_end}
+{synopt:{opt papersize}({it:papersize})} set paper size for LaTeX document.{p_end}
 {synopt:{opt relative:path}({it:string})} specify a relative path from the new .tex file to the .tex table {p_end}
-
 {synopt:{opt font}({it:fontpackage}[,fopt({it:packageoptions})])} set text font for LaTeX document {p_end}
-
 {synopt:{opt mathfont}({it:fontpackage}[,mfopt({it:packageoptions})])} set math font for LaTeX document {p_end}
+
 
 
 {marker description}{...}
@@ -163,8 +163,13 @@ and OS X.
 {phang}
 {opt marg:ins}{bf:({it:size})} sets the margins for the document.  The default margins are 1.5cm to allow
 for extra space for tables.  This option sets all margins to the same value (i.e. top, bottom, left, right)
-using the LaTeX package geometry.  For example, specifying the option margins(1in) will set all margins to
+using the LaTeX package {it:geometry}.  For example, specifying the option margins(1in) will set all margins to
 one inch.  The user must specify a {it:size} that LaTeX understands, such as 15mm or 1.5in.
+
+
+{phang}
+{opt papersize}{bf:({it:papersize})} sets the papersize of your document.  If this option is not called -- it defaults to A4 (8.5"x11") paper.  This option is especially helpful for "exploratory" analysis that includes many columns in a single regression and does not fit on a normal A4 (8.5"x11") paper.  You can set the papersize to anything allowed by the {it:Geometry} package in LaTeX.  See the documentation for the geometry package for more information on the allowed values for this option.  As a quick-start guide -- if you need a large sheet -- use the option {it:papersize(ansiepaper})} to print results on a ANSI E (34" x 44") sheet.
+
 
 {phang}
 {opt relative:path}{bf:({it:string})} creates a relative, rather than absolute, path from the new .tex file to
@@ -186,6 +191,8 @@ Virtual Math by writing \usepackage{eulervm} to the preamble.  The option mathfo
 will set the math font to Euler Virtual Math using the small and euler-digits options by writing
 \usepackage[small, euler-digits]{eulervm} to the preamble.  If the option font is not specified the default
 LaTeX math font Computer Modern is used.
+
+
 
 {dlgtab:\specialcell{} syntax}
 

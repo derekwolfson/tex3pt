@@ -1,5 +1,5 @@
 program tex3pt
-*! version 3.1.1 Derek Wolfson 5jan2022
+*! version 3.2 Derek Wolfson 1apr2022
 syntax [anything(name=table id="tex table")] using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string)  CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
@@ -126,6 +126,7 @@ version 12
 	else{
 	local MARGINSIZE  "1.5cm"
 	}
+	// add paper size -- so can output "large" results on ANSI-style paper
 	if "`papersize'"==""{
 	local PAPERSIZE  "a4paper"
 	}
