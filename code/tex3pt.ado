@@ -1,5 +1,5 @@
 program tex3pt
-*! version 3.2 Derek Wolfson 1apr2022
+*! version 3.2.1 Derek Wolfson 19may2022
 syntax [anything(name=table id="tex table")] using/, ///
 	[replace] [TITLE(string) TLABel(string) NOTE(string asis)] ///
 	[FONT(string) MATHFONT(string) FONTSIZE(string)  CWIDTH(string) WIDE] /// OPTIONS REQ. SUBSEQUENT LOCALS
@@ -209,7 +209,7 @@ version 12
 	tokenize "`stars'"
 	local stars1 `1'
 	local stars2 `2'
-	local stars2: subinstr local stars2 "_" "\textunderscore "
+	local stars2: subinstr local stars2 "_" "\textunderscore ", all 
 	else if "`stars1'"=="cluster"{
 		local starnote "\Figtext{{`notefontsize' Standard errors clustered by `stars2' in parentheses. *~\${p<.10}$, **~\${p<.05}$, ***~\${p<.01}$.}}"
 	}
